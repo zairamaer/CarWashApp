@@ -1,0 +1,58 @@
+<ion-content class="register-page">
+
+  <div class="register-container">
+    <!-- Left Side: Image and Welcome Text -->
+    <div class="register-left">
+      <img src="assets/car.jpg" alt="Register Illustration" />
+      <div class="welcome-text">
+        <h2>Create Account</h2>
+        <p>Join us to book car cleaning services with ease!</p>
+      </div>
+    </div>
+
+    <!-- Right Side: Registration Form -->
+    <div class="register-right">
+      <ion-card class="register-form">
+        <ion-card-header>
+          <ion-card-title>Register</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="floating">Name</ion-label>
+            <ion-input type="text" [(ngModel)]="registrationData.name"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" [(ngModel)]="registrationData.email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Phone</ion-label>
+            <ion-input type="tel" [(ngModel)]="registrationData.phone"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" [(ngModel)]="registrationData.password"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Confirm Password</ion-label>
+            <ion-input type="password" [(ngModel)]="registrationData.password_confirmation"></ion-input>
+          </ion-item>
+
+          <ion-button expand="full" class="register-btn" (click)="register()">Register</ion-button>
+
+          <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+          <p class="login-link">
+            Already have an account? <a routerLink="/login">Login</a>
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+</ion-content>

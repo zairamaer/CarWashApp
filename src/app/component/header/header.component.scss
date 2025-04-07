@@ -1,0 +1,96 @@
+.custom-toolbar {
+    --background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0; /* Prevent logo from shrinking */
+  }
+  
+  .logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #007bff; /* Engaging blue color */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+  }
+  
+  .logo-text:hover {
+    color: #0056b3; /* Darker blue on hover for interactivity */
+  }
+  
+  .center-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-grow: 1; /* Take available space */
+  }
+  
+  .text-button {
+    --background: transparent;
+    --box-shadow: none;
+    --color: #000000;
+    border: none;
+    background: none;
+    font-weight: 500;
+    text-transform: none;
+    padding: 0;
+    min-width: unset;
+    height: auto;
+    transition: all 0.3s ease; /* Smooth transition for background and color */
+  }
+  
+  .text-button.active {
+    --background: #007bff; /* Blue background for active button */
+    --color: #ffffff; /* White text for active button */
+    border-radius: 5px; /* Rounded corners for active button */
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); /* Soft blue glow for active button */
+  }
+  
+  .text-button.active:hover {
+    --background: #0056b3; /* Darker blue when hovered for active button */
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4); /* Stronger glow effect on hover */
+  }
+  
+  .text-button:hover {
+    --background: #f1f1f1; /* Light background for non-active buttons */
+    cursor: pointer;
+    color: #007bff; /* Change text color on hover */
+  }
+  
+  .login-button {
+    display: flex;
+  }
+  
+  .login-btn {
+    --background: #007bff; /* Blue background */
+    --color: #ffffff; /* White text */
+    --box-shadow: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  
+  .login-btn:hover {
+    --background: #0056b3; /* Darker blue for hover effect */
+  }
+  

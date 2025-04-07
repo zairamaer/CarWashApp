@@ -1,0 +1,70 @@
+<!-- Sidebar (Only for Small Screens) -->
+<app-sidebar *ngIf="!(screenSizeService.isLargeScreen$ | async)"></app-sidebar>
+
+<!-- Menu Header for Small Screens -->
+<ion-header *ngIf="!(screenSizeService.isLargeScreen$ | async)">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Car Wash App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Header (Only for Large Screens) -->
+<app-header *ngIf="screenSizeService.isLargeScreen$ | async"></app-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Section Title -->
+  <div class="section-title">
+    <h2>Our Services</h2>
+    <p>Discover Our <span class="highlight">Car Wash Services</span></p>
+  </div>
+
+  <!-- Filter Chips -->
+  <div class="service-tabs">
+    <ion-chip
+      [outline]="selectedSize !== 'ALL'"
+      color="primary"
+      (click)="selectSize('ALL')"
+      [class.selected]="selectedSize === 'ALL'"
+    >
+      All
+    </ion-chip>
+
+    <ion-chip
+      *ngFor="let size of vehicleSizes"
+      [outline]="selectedSize !== size.vehicleSizeCode"
+      color="primary"
+      (click)="selectSize(size.vehicleSizeCode)"
+      [class.selected]="selectedSize === size.vehicleSizeCode"
+    >
+      {{ size.vehicleSizeDescription }}
+    </ion-chip>
+  </div>
+
+  <!-- Service Cards Grid -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let service of filteredServices">
+        <ion-card>
+          <img
+            [src]="'https://via.placeholder.com/300x180?text=' + service.service_type.serviceTypeName"
+            alt="{{ service.service_type.serviceTypeName }}"
+          />
+          <ion-card-header>
+            <ion-card-title>{{ service.service_type.serviceTypeName }}</ion-card-title>
+            <ion-note>{{ service.vehicle_size.vehicleSizeDescription }}</ion-note>
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ service.service_type.serviceTypeDescription }}</p>
+            <p><strong>Price:</strong> ₱{{ service.price }}</p>
+            <ion-button expand="block" fill="outline" size="small" color="primary">
+              Learn More
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

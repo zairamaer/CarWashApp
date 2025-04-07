@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit Service</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="saveChanges()">
+    <!-- Vehicle Size Dropdown -->
+    <ion-item>
+      <ion-label position="floating">Vehicle Size</ion-label>
+      <ion-select [(ngModel)]="service.vehicleSizeCode" name="vehicleSize" required>
+        <ion-select-option *ngFor="let size of vehicleSizes" [value]="size.vehicleSizeCode">
+          {{ size.vehicleSizeCode }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Service Name Editable -->
+    <ion-item>
+      <ion-label position="floating">Service Name</ion-label>
+      
+      <ng-container *ngIf="!isServiceNameEditable; else editMode">
+        <ion-select [(ngModel)]="service.serviceTypeID" name="serviceType" required (ionChange)="updateDescription()">
+          <ion-select-option *ngFor="let type of serviceTypes" [value]="type.serviceTypeID">
+            {{ type.serviceTypeName }}
+          </ion-select-option>
+        </ion-select>
+      </ng-container>
+
+      <ng-template #editMode>
+        <ion-input [(ngModel)]="customServiceName" name="customServiceName"></ion-input>
+      </ng-template>
+
+      <ion-button fill="clear" (click)="toggleServiceNameEditMode()">
+        {{ isServiceNameEditable ? 'Select Service' : 'Edit Service Name' }}
+      </ion-button>
+    </ion-item>
+
+    <!-- Service Description -->
+    <ion-item>
+      <ion-label position="floating">Description</ion-label>
+      <ion-textarea [(ngModel)]="service.description" name="description"></ion-textarea>
+    </ion-item>
+
+    <!-- Price Input -->
+    <ion-item>
+      <ion-label position="floating">Price</ion-label>
+      <ion-input type="number" [(ngModel)]="service.price" name="price" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" color="primary">Save Changes</ion-button>
+  </form>
+</ion-content>

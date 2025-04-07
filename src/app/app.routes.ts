@@ -1,13 +1,57 @@
 import { Routes } from '@angular/router';
+import { LoginComponent } from './customer/login/login.component';
+import { RegisterComponent } from './customer/register/register.component';
+import { LandingComponent } from './customer/landing/landing.component';
+import { HomePage } from './customer/home/home.page';
+import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { AdminServicesPage } from './admin-services/admin-services.page'; // Import Admin Services Component
+import { AdminAuthGuard } from './auth/admin-auth.guard'; // Import Admin Auth Guard
+import { AdminAppointmentsPage } from './admin/admin-appointments/admin-appointments.page';
+import {ServicesPage} from './customer/services/services.page';
 
 export const routes: Routes = [
   {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    path: '',
+    component: LandingComponent,
   },
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+  },
+  {
+    path: 'home',
+    component: HomePage,
+  },
+  {
+    path: 'services',
+    component: ServicesPage,
+  },
+  {
+    path: 'admin-login',
+    component: AdminLoginComponent,
+  },
+  {
+    path: 'admin-dashboard', // Route for admin dashboard
+    component: AdminDashboardComponent,
+    //canActivate: [AdminAuthGuard], // Protect this route with the Admin Auth Guard
+  },
+  {
+    path: 'admin-services', // Route for admin services
+    component: AdminServicesPage,
+    //canActivate: [AdminAuthGuard], // Protect this route with the Admin Auth Guard
+  },
+  {
+    path: 'admin-appointments', // Route for admin services
+    component: AdminAppointmentsPage,
+    //canActivate: [AdminAuthGuard], // Protect this route with the Admin Auth Guard
+  },
+  {
+    path: '**',
+    redirectTo: '', // Redirect to landing page for any unknown routes
   },
 ];

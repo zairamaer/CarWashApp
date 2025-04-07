@@ -1,0 +1,41 @@
+<ion-content class="login-page">
+
+  <div class="login-container">
+    <!-- Left Side (Image or Welcome Text) -->
+    <div class="login-left">
+      <img src="assets/car.jpg" alt="Login Illustration" />
+      <div class="welcome-text">
+        <h2>Welcome Back!</h2>
+        <p>Log in to manage your car cleaning appointments and services.</p>
+      </div>
+    </div>
+
+    <!-- Right Side (Login Form) -->
+    <div class="login-right">
+      <ion-card class="login-form">
+        <ion-card-header>
+          <ion-card-title>Login</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" [(ngModel)]="credentials.email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" [(ngModel)]="credentials.password"></ion-input>
+          </ion-item>
+
+          <ion-button expand="full" class="login-btn" (click)="login()">Login</ion-button>
+
+          <p class="register-link">
+            Don't have an account? <a routerLink="/register">Register</a>
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+</ion-content>

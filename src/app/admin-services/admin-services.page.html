@@ -1,0 +1,28 @@
+<ion-split-pane contentId="main-content">
+  <!-- Sidebar Component -->
+  <ion-menu contentId="main-content" type="overlay">
+    <ion-content>
+      <app-admin-sidebar></app-admin-sidebar>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Admin Services</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+
+      <!-- Create Button to Open Modal -->
+      <div class="button-container">
+        <ion-button (click)="openServiceForm()" color="success">Create</ion-button>
+      </div>
+
+      <!-- Service List -->
+      <app-service-list></app-service-list>
+    </ion-content>
+  </div>
+</ion-split-pane>

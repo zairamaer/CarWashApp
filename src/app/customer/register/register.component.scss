@@ -1,0 +1,97 @@
+.register-page {
+    --padding: 2rem;
+    background: #f9fafc;
+    font-family: 'Segoe UI', sans-serif;
+  
+    .register-container {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      padding: 2rem;
+  
+      .register-left {
+        flex: 1;
+        min-width: 300px;
+        text-align: center;
+  
+        img {
+          max-width: 100%;
+          border-radius: 16px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+  
+        .welcome-text {
+          margin-top: 1.5rem;
+  
+          h2 {
+            font-size: 1.8rem;
+            color: #0b1f33;
+          }
+  
+          p {
+            font-size: 1rem;
+            color: #555;
+          }
+        }
+      }
+  
+      .register-right {
+        flex: 1;
+        min-width: 300px;
+  
+        .register-form {
+          padding: 2rem;
+          border-radius: 16px;
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  
+          ion-card-title {
+            text-align: center;
+            color: #1e90ff;
+          }
+  
+          ion-item {
+            margin-bottom: 1rem;
+          }
+  
+          .register-btn {
+            margin-top: 1rem;
+            --background: #1e90ff;
+            --color: white;
+          }
+  
+          .error {
+            color: red;
+            text-align: center;
+            margin-top: 0.5rem;
+          }
+  
+          .login-link {
+            margin-top: 1rem;
+            text-align: center;
+  
+            a {
+              color: #1e90ff;
+              font-weight: 500;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+  
+    @media screen and (max-width: 768px) {
+      .register-container {
+        flex-direction: column;
+  
+        .register-left,
+        .register-right {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+  }
+  

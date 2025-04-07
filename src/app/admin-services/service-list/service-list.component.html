@@ -1,0 +1,47 @@
+<ion-content>
+  <ion-grid class="custom-grid">
+
+    <!-- Table Header -->
+    <ion-row class="header-row">
+      <ion-col class="head-col">Vehicle Size</ion-col>
+      <ion-col class="head-col">Service Name</ion-col>
+      <ion-col class="head-col">Description</ion-col>
+      <ion-col class="head-col">Price</ion-col>
+      <ion-col class="head-col">Actions</ion-col>
+    </ion-row>
+
+    <!-- Data Rows -->
+    <ion-row 
+      *ngFor="let service of displayedServices; let i = index" 
+      [class.alternate-row]="i % 2 === 0" 
+      class="data-row"
+      tabindex="0"
+    >
+      <ion-col>{{ service.vehicleSizeCode }}</ion-col>
+      <ion-col>{{ service.service_type.serviceTypeName }}</ion-col>
+      <ion-col>{{ service.service_type.serviceTypeDescription }}</ion-col>
+      <ion-col>P{{ service.price }}</ion-col>
+      <ion-col class="actions">
+        <ion-button fill="solid" color="primary" size="small" (click)="openEditModal(service)">
+          Edit
+        </ion-button>
+        <ion-button fill="solid" color="danger" size="small">
+          Delete
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+      <!-- Pagination Controls -->
+      <ion-row class="pagination-row">
+        <ion-col size="12" class="pagination-container">
+          <ion-button fill="clear" size="small" (click)="changePage(false)" [disabled]="currentPage === 1">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </ion-button>
+          <span class="pagination-text">Page {{ currentPage }} of {{ totalPages }}</span>
+          <ion-button fill="clear" size="small" (click)="changePage(true)" [disabled]="currentPage === totalPages">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+</ion-content>

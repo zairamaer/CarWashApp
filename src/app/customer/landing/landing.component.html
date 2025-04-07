@@ -1,0 +1,97 @@
+<!-- Sidebar (Only for Small Screens) -->
+<app-sidebar *ngIf="!(screenSizeService.isLargeScreen$ | async)"></app-sidebar>
+
+<!-- Menu Header for Small Screens -->
+<ion-header *ngIf="!(screenSizeService.isLargeScreen$ | async)">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first"></ion-menu-button> <!-- ✅ Opens menuId "first" -->
+    </ion-buttons>
+    <ion-title>Car Wash App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Header (Only for Large Screens) -->
+<app-header *ngIf="screenSizeService.isLargeScreen$ | async"></app-header>
+
+<!-- Main Content -->
+<ion-content class="landing-page">
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-text">
+      <h1>Keep your Clean Cars Always</h1>
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+      <ion-button routerLink="/services" class="hero-btn">Explore Services</ion-button>
+    </div>
+    <img src="assets/car.jpg" alt="Car Image" class="hero-img" />
+  </section>
+
+<!-- Services Section -->
+<section class="services" id="services">
+  <h2>Services</h2>
+  <div class="services-grid">
+    <div class="service-card">Car Wash</div>
+    <div class="service-card">Chemical Wash</div>
+    <div class="service-card">Steam Wash</div>
+  </div>
+</section>
+
+
+  <!-- Process Section -->
+  <section class="process">
+    <h2>Process</h2>
+    <div class="process-steps">
+      <div class="step"><span>1</span> Brake, Vacuum, and Clean</div>
+      <div class="step"><span>2</span> Clean Wheels & Tires</div>
+      <div class="step"><span>3</span> Wash, Clean & Treat</div>
+      <div class="step"><span>4</span> Polish & Wax</div>
+    </div>
+  </section>
+
+ <!-- Pricing Section -->
+<section class="pricing">
+  <h2>Pricing</h2>
+  <div class="pricing-cards">
+    <div class="price-card">
+      <h3>Basic Cleaning</h3>
+      <p>$24</p>
+      <ion-button fill="outline">More Info</ion-button>
+    </div>
+    <div class="price-card">
+      <h3>Premium Cleaning</h3>
+      <p>$44</p>
+      <ion-button fill="outline">More Info</ion-button>
+    </div>
+    <div class="price-card">
+      <h3>Full Cleaning</h3>
+      <p>$64</p>
+      <ion-button fill="outline">More Info</ion-button>
+    </div>
+  </div>
+</section>
+
+<!-- Quality Services Section -->
+<section id="pricing"  class="quality-section">
+  <div class="quality-content">
+    <h2>We're Providing <span class="highlight">Best Quality Services</span></h2>
+    <p>
+      Our professional team is committed to delivering the highest standard of car cleaning and detailing.
+      We use top-grade products and advanced equipment to ensure your vehicle looks brand new, every time.
+    </p>
+
+    <ul class="quality-features">
+      <li>✅ Eco-friendly cleaning materials</li>
+      <li>✅ Skilled and experienced professionals</li>
+      <li>✅ Affordable packages with premium value</li>
+      <li>✅ Satisfaction guaranteed</li>
+    </ul>
+
+    <ion-button color="primary" routerLink="/services">View All Services</ion-button>
+  </div>
+  <img src="assets/quality-service.jpg" alt="Service Quality" class="quality-img" />
+</section>
+
+
+
+</ion-content>

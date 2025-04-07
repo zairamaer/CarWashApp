@@ -1,0 +1,36 @@
+<ion-content>
+  <ion-list>
+    <!-- Admin Profile Section -->
+    <ion-item lines="none">
+      <ion-avatar slot="start">
+        <img src="assets/icon/admin.png" alt="Admin Profile">
+      </ion-avatar>
+      <ion-label>
+        <h3>Admin</h3>
+        <p>Administrator</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-menu-toggle auto-hide="false">
+      <ion-item routerLink="/admin-dashboard" routerDirection="root" routerLinkActive="active">
+        <ion-icon name="grid-outline" slot="start"></ion-icon>
+        <ion-label>Dashboard</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+
+    <ion-menu-toggle auto-hide="false">
+      <ion-item routerLink="/admin-services" routerDirection="root" routerLinkActive="active">
+        <ion-icon name="cog-outline" slot="start"></ion-icon>
+        <ion-label>Services</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+
+    <ion-menu-toggle auto-hide="false">
+      <ion-item routerLink="/admin-appointments" routerDirection="root" routerLinkActive="active">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-label>Appointments</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+
+  </ion-list>
+</ion-content>

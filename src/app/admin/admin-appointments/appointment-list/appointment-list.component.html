@@ -1,0 +1,29 @@
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row class="header">
+      <ion-col>Name</ion-col>
+      <ion-col>Email</ion-col>
+      <ion-col>Service Name</ion-col>
+      <ion-col>Vehicle Size</ion-col>
+      <ion-col>Price</ion-col>
+      <ion-col>Appointment Date</ion-col>
+      <ion-col>Status</ion-col>
+      <ion-col>Notes</ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let appointment of appointments" class="data-row">
+      <ion-col>{{ appointment.name }}</ion-col>
+      <ion-col>{{ appointment.email }}</ion-col>
+      <ion-col>{{ appointment.serviceName }}</ion-col>
+      <ion-col>{{ appointment.vehicleSize }}</ion-col>
+      <ion-col>{{ appointment.price | currency:'PHP' }}</ion-col>
+      <ion-col>{{ appointment.appointmentDate | date:'short' }}</ion-col>
+      <ion-col>
+        <ion-badge [color]="appointment.status === 'Confirmed' ? 'success' : 'warning'">
+          {{ appointment.status }}
+        </ion-badge>
+      </ion-col>
+      <ion-col>{{ appointment.notes }}</ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

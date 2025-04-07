@@ -1,0 +1,43 @@
+<ion-split-pane contentId="main-content">
+  <!-- Sidebar Component -->
+  <ion-menu contentId="main-content" type="overlay">
+    <ion-content>
+      <app-admin-sidebar></app-admin-sidebar>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Admin Dashboard</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="logout()">Logout</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4">
+            <ion-card>
+              <ion-card-content>
+                <h2><a routerLink="/admin-users">Users</a></h2>
+                <p>1000</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="4">
+            <ion-card>
+              <ion-card-content>
+                <h2><a routerLink="/admin-services">Services</a></h2>
+                <p>100</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </div>
+</ion-split-pane>

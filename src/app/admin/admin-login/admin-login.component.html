@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Admin Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="adminLoginForm" (ngSubmit)="login()" style="padding: 20px;">
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <div *ngIf="formControls['email'].invalid && formControls['email'].touched" style="color: red;">
+      <small *ngIf="formControls['email'].errors?.['required']">Email is required.</small>
+      <small *ngIf="formControls['email'].errors?.['email']">Enter a valid email.</small>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <div *ngIf="formControls['password'].invalid && formControls['password'].touched" style="color: red;">
+      <small *ngIf="formControls['password'].errors?.['required']">Password is required.</small>
+      <small *ngIf="formControls['password'].errors?.['minlength']">Password must be at least 6 characters.</small>
+    </div>
+
+    <ion-button expand="block" type="submit" [disabled]="adminLoginForm.invalid || loading">
+      <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+      <span *ngIf="!loading">Login</span>
+    </ion-button>
+  </form>
+</ion-content>

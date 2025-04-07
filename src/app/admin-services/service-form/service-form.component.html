@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Create Service</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="saveService()">
+
+    <!-- Multi-Select for Vehicle Size (Displays Only vehicleSizeCode) -->
+    <ion-item>
+      <ion-label position="stacked">Vehicle Size</ion-label>
+      <ion-select [(ngModel)]="selectedVehicleSizes" name="vehicleSizes" multiple="true" placeholder="Select vehicle sizes">
+        <ion-select-option *ngFor="let size of vehicleSizes" [value]="size.vehicleSizeCode">
+          {{ size.vehicleSizeCode }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Checkbox to enable adding a new Service Type -->
+    <ion-item>
+      <ion-label>Add New Service Type</ion-label>
+      <ion-checkbox [(ngModel)]="isAddingNewServiceType" name="isAddingNewServiceType" (ionChange)="toggleNewServiceType()"></ion-checkbox>
+    </ion-item>
+
+    <!-- Dropdown for Existing Service Type (Disabled when adding a new one) -->
+    <ion-item *ngIf="!isAddingNewServiceType">
+      <ion-label position="stacked">Service Type</ion-label>
+      <ion-select [(ngModel)]="selectedServiceTypeID" name="serviceTypeID" (ionChange)="onServiceTypeChange()" placeholder="Select service type">
+        <ion-select-option *ngFor="let type of serviceTypes" [value]="type.serviceTypeID">
+          {{ type.serviceTypeName }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Input for New Service Type (Shown when checkbox is checked) -->
+    <ion-item *ngIf="isAddingNewServiceType">
+      <ion-label position="stacked">New Service Type</ion-label>
+      <ion-input [(ngModel)]="newServiceTypeName" name="newServiceTypeName" placeholder="Enter new service type"></ion-input>
+    </ion-item>
+
+    <!-- Auto-Filled Description -->
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-textarea [(ngModel)]="description" name="description" placeholder="Service description will appear here"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Price</ion-label>
+      <ion-input [(ngModel)]="price" name="price" type="number" placeholder="Enter price" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" color="primary" type="submit">Save Service</ion-button>
+  </form>
+
+  <!-- Preview of Added Services -->
+  <ion-list *ngIf="addedServices.length > 0">
+    <ion-item *ngFor="let service of addedServices">
+      <ion-label>
+        <h2>{{ service.vehicleSizeCode }}</h2>
+        <p>{{ service.serviceType.serviceTypeName }} - ${{ service.price }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
