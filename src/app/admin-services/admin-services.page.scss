@@ -1,13 +1,50 @@
-ion-split-pane {
-    --side-width: 280px; /* Default width */
-  
-    @media (max-width: 768px) {
-      --side-width: 200px; /* Smaller width on small screens */
-    }
-  }
-
-  ion-content {
-    --overflow: hidden;
+#main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // Full viewport height
 }
 
-  
+ion-header {
+  flex: 0 0 auto; // Header doesn't grow
+}
+
+ion-content {
+  flex: 1 1 auto; // Fill remaining space
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // Prevent outer scroll
+}
+
+.service-table-container {
+  flex: 1 1 auto; // Fill available space
+  overflow-y: auto; // Enable vertical scroll
+  -webkit-overflow-scrolling: touch; // Smooth scroll on mobile
+}
+
+.pagination-container {
+  flex: 0 0 auto; // Stays at bottom
+  margin-top: 0.5rem;
+}
+
+/* Sidebar width */
+ion-split-pane {
+  --side-width: 280px; /* Default width */
+
+  @media (max-width: 1024px) {
+    --side-width: 220px;
+  }
+
+  @media (max-width: 768px) {
+    --side-width: 200px;
+  }
+}
+
+/* Optional: show scrollbar on web browsers */
+.service-table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.service-table-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}

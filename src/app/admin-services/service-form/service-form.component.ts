@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { ServiceService } from 'src/app/services/service.service';
+import { AlertController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-service-form',
@@ -14,6 +16,7 @@ import { ServiceService } from 'src/app/services/service.service';
 export class ServiceFormComponent implements OnInit {
   selectedVehicleSizes: string[] = [];
   selectedServiceTypeID: number | null = null;
+  selectedFile: File | null = null;
   description: string = '';
   price: string = '';
   addedServices: any[] = [];
@@ -23,7 +26,8 @@ export class ServiceFormComponent implements OnInit {
   isAddingNewServiceType: boolean = false;
   newServiceTypeName: string = '';
 
-  constructor(private modalCtrl: ModalController, private serviceService: ServiceService) {}
+  constructor(private modalCtrl: ModalController, private serviceService: ServiceService,
+    private alertController: AlertController, private toastController: ToastController) {}
 
   ngOnInit() {
     this.fetchServiceTypes();
@@ -64,6 +68,13 @@ export class ServiceFormComponent implements OnInit {
     }
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }  
+
   toggleNewServiceType() {
     if (this.isAddingNewServiceType) {
       this.selectedServiceTypeID = null;
@@ -73,17 +84,20 @@ export class ServiceFormComponent implements OnInit {
 
   saveService() {
     if (!this.price || this.selectedVehicleSizes.length === 0) {
-      alert('Please fill all required fields.');
+      this.presentAlert('Missing Fields', 'Please fill all required fields.');
       return;
     }
 
     if (this.isAddingNewServiceType && !this.newServiceTypeName.trim()) {
-      alert('Please enter a new service type.');
+      this.presentAlert('Missing Service Type', 'Please enter a new service type.');
       return;
     }
 
     if (this.isAddingNewServiceType) {
-      this.serviceService.createServiceType({ serviceTypeName: this.newServiceTypeName, serviceTypeDescription: this.description }).subscribe({
+      this.serviceService.createServiceType({
+        serviceTypeName: this.newServiceTypeName,
+        serviceTypeDescription: this.description
+      }).subscribe({
         next: (response) => {
           console.log('New service type created:', response);
           this.selectedServiceTypeID = response.serviceTypeID;
@@ -91,7 +105,7 @@ export class ServiceFormComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error creating new service type:', error);
-          alert('Failed to create new service type.');
+          this.presentToast('Failed to create new service type ❌', 'danger');
         },
       });
     } else {
@@ -99,25 +113,30 @@ export class ServiceFormComponent implements OnInit {
     }
   }
 
+
   saveServiceWithExistingType() {
     this.selectedVehicleSizes.forEach(size => {
-      const vehicleSizeCode = this.getVehicleSize(size); // Fetch from backend
+      const vehicleSizeCode = this.getVehicleSize(size);
 
-      const serviceData = {
-        vehicleSizeCode: vehicleSizeCode,
-        serviceTypeID: this.selectedServiceTypeID as number,
-        description: this.description,
-        price: parseFloat(this.price).toFixed(2),
-      };
+      const formData = new FormData();
+      formData.append('vehicleSizeCode', vehicleSizeCode);
+      formData.append('serviceTypeID', String(this.selectedServiceTypeID));
+      formData.append('description', this.description);
+      formData.append('price', parseFloat(this.price).toFixed(2));
 
-      this.serviceService.createService(serviceData).subscribe({
+      if (this.selectedFile) {
+        formData.append('serviceTypeImage', this.selectedFile);
+      }
+
+      this.serviceService.createService(formData).subscribe({
         next: (response) => {
           console.log('Service created:', response);
           this.addedServices.push(response);
+          this.presentToast('Service created successfully ✅'); // 👈 success toast
         },
         error: (error) => {
           console.error('Error creating service:', error);
-          alert('Failed to save service.');
+          this.presentToast('Failed to save service ❌', 'danger'); // 👈 error toast
         },
       });
     });
@@ -125,8 +144,29 @@ export class ServiceFormComponent implements OnInit {
     this.modalCtrl.dismiss(this.addedServices);
   }
 
+
   closeModal() {
     this.modalCtrl.dismiss();
   }
+
+  async presentAlert(header: string, message: string) {
+  const alert = await this.alertController.create({
+    header,
+    message,
+    buttons: ['OK']
+  });
+  await alert.present();
+  }
+
+  async presentToast(message: string, color: 'success' | 'danger' = 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color,
+      position: 'bottom'
+    });
+    toast.present();
+  }
+
 }
 

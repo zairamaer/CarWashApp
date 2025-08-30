@@ -1,0 +1,159 @@
+<div class="wizard-container">
+  <div class="steps-sidebar">
+    <div class="step-item" *ngFor="let step of steps; let i = index" [class.active]="currentStep === i + 1" (click)="goToStep(i + 1)">
+      <div class="step-circle">{{ i + 1 }}</div>
+      <span>{{ step.title }}</span>
+    </div>
+  </div>
+  <div class="step-content">
+    <div *ngIf="currentStep === 1">
+      <h2>Vehicle Type</h2>
+      <p>Select a vehicle type below.</p>
+      <div class="vehicle-type-list">
+        <div *ngFor="let vehicle of vehicleTypes" class="vehicle-type" [class.selected]="selectedVehicleCode === vehicle.vehicleSizeCode" (click)="selectVehicle(vehicle.vehicleSizeCode)">
+          <div class="icon"><i class="fa fa-car"></i></div>
+          <div class="label">{{ vehicle.vehicleSizeDescription }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="currentStep === 2">
+      <h2>Services</h2>
+      <p>Select a service.</p>
+      <div class="services-list">
+        <div *ngFor="let service of filteredServices" class="service-item">
+          <div class="info">
+            <strong>{{ service.service_type.serviceTypeName }}</strong>
+            <span class="meta">{{ service.service_type.serviceTypeDescription }} | ₱{{ service.price }}</span>
+          </div>
+          <button (click)="selectedServices.clear(); toggleService(service)" [class.selected]="isSelected(service)">
+            {{ isSelected(service) ? 'Selected ✔' : 'Select' }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="currentStep === 3">
+      <h2>Schedule</h2>
+      <p>Select a Date and Time</p>
+      <div class="schedule-appointment">
+        <ion-datetime presentation="date" [(ngModel)]="appointmentDate" (ionChange)="fetchAvailableSlots()"></ion-datetime>
+        <div *ngIf="availableSlots.length > 0" class="time-slots">
+          <label>Available Time Slots:</label>
+          <div class="slots-container">
+            <ion-item *ngFor="let time of availableSlots" (click)="selectTime(time)" [class.selected]="appointmentTime === time">
+              {{ time }}
+            </ion-item>
+          </div>
+        </div>
+        <div *ngIf="availableSlots.length === 0 && appointmentDate">
+          <p>No available time slots for this date.</p>
+        </div>
+        <ion-item>
+          <ion-label position="floating">Notes (optional)</ion-label>
+          <ion-input [(ngModel)]="notes"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+    
+    <div *ngIf="currentStep === 4" class="payment-step">
+      <h2>Payment</h2>
+      <p>Review your booking and select payment method.</p>
+      <div class="payment-summary">
+        <div class="summary-row">
+          <span>Vehicle Type:</span>
+          <span>{{ selectedVehicleCode }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Selected Service:</span>
+          <span>{{ getServiceNameById(getSelectedServicesArray()[0]) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Date and Time:</span>
+          <span>{{ appointmentDate }} {{ appointmentTime }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Notes:</span>
+          <span>{{ notes || 'None' }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span>₱{{ calculateTotal() }}</span>
+        </div>
+      </div>
+      
+      <div class="payment-options">
+        <h3>Payment Method</h3>
+        <ion-radio-group [(ngModel)]="selectedPaymentMethod">
+          <ion-item>
+            <ion-label>PayMongo (GCash, Maya, Card)</ion-label>
+            <ion-radio slot="start" value="paymongo"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>GCash (Demo)</ion-label>
+            <ion-radio slot="start" value="gcash"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </div>
+      
+      <div class="payment-actions">
+        <ion-button 
+          *ngIf="selectedPaymentMethod === 'paymongo'" 
+          expand="block" 
+          color="primary" 
+          (click)="processPayMongoPayment()"
+          [disabled]="isCheckingPayment">
+          {{ isCheckingPayment ? 'Processing Payment...' : 'Pay with PayMongo' }}
+        </ion-button>
+        
+        <ion-button 
+          *ngIf="selectedPaymentMethod === 'gcash'" 
+          expand="block" 
+          color="secondary" 
+          (click)="simulateGCashPayment()">
+          Pay with GCash (Demo)
+        </ion-button>
+      </div>
+      
+      <div *ngIf="isCheckingPayment" class="payment-status">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Waiting for payment confirmation...</p>
+        <p><small>Complete your payment in the PayMongo window that opened.</small></p>
+      </div>
+      
+      <div *ngIf="checkoutUrl" class="payment-link">
+        <p>If the payment window didn't open automatically:</p>
+          <ion-button fill="outline" (click)="openCheckoutWindow(checkoutUrl)">
+            Open Payment Window
+          </ion-button>
+      </div>
+    </div>
+    
+    <div *ngIf="currentStep === 5" class="confirmation-step">
+      <div class="confirmation-letter">
+        <ion-icon name="checkmark-circle" color="success" size="large"></ion-icon>
+        <h2>Booking Confirmed!</h2>
+        <p>Thank you for choosing our car wash services.</p>
+        <p class="note">Please save this confirmation for your records.</p>
+        <ion-button expand="block" color="primary" (click)="finishBooking()">
+          Book Another Service
+        </ion-button>
+      </div>
+    </div>
+    
+    <div class="wizard-nav" *ngIf="currentStep < 4 || (currentStep === 4 && !isCheckingPayment)">
+      <ion-button 
+        (click)="prevStep()" 
+        [disabled]="currentStep === 1" 
+        fill="outline">
+        Back
+      </ion-button>
+      <ion-button 
+        (click)="nextStep()" 
+        [disabled]="currentStep === steps.length || isCheckingPayment" 
+        color="primary">
+        Next
+      </ion-button>
+    </div>
+  </div>
+</div>

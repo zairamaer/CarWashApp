@@ -1,0 +1,64 @@
+<!-- Sidebar for small screens -->
+<app-home-sidebar *ngIf="!(screenSizeService.isLargeScreen$ | async)"></app-home-sidebar>
+
+<!-- Header for small screens -->
+<ion-header *ngIf="!(screenSizeService.isLargeScreen$ | async)">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Car Wash App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Header for large screens -->
+<app-home-header *ngIf="screenSizeService.isLargeScreen$ | async"></app-home-header>
+
+<!-- Main Content -->
+<ion-content [fullscreen]="true" class="ion-padding appointment-page">
+
+      <!-- History Title -->
+    <div class="history-header">
+      <h2>History</h2>
+    </div>
+
+  <ion-grid>
+    <ion-row>
+      <!-- Left Button Column -->
+      <ion-col size="12" sizeMd="3" class="button-menu">
+        <div class="menu-buttons">
+          <ion-button
+            [color]="selectedView === 'pending' ? 'primary' : 'medium'"
+            (click)="selectedView = 'pending'"
+          >
+            Pending
+          </ion-button>
+
+          <ion-button
+            [color]="selectedView === 'scheduled' ? 'primary' : 'medium'"
+            (click)="selectedView = 'scheduled'"
+          >
+            Scheduled
+          </ion-button>
+
+          <ion-button
+            [color]="selectedView === 'history' ? 'primary' : 'medium'"
+            (click)="selectedView = 'history'"
+          >
+            History
+          </ion-button>
+        </div>
+      </ion-col>
+
+      <!-- Right Content Column -->
+      <ion-col size="12" sizeMd="9">
+        <div class="content-box ion-padding">
+          <app-pending *ngIf="selectedView === 'pending'"></app-pending>
+          <app-schedules *ngIf="selectedView === 'scheduled'"></app-schedules>
+          <app-history *ngIf="selectedView === 'history'"></app-history>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+</ion-content>

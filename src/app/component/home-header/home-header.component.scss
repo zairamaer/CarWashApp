@@ -1,0 +1,125 @@
+.custom-toolbar {
+  --background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  height: 100px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between; /* space between left, center, right */
+  align-items: center;
+  width: 100%;
+  position: relative; /* for absolute positioning of center-buttons */
+  padding: 0 20px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0; /* Prevent logo from shrinking */
+}
+
+.logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #007bff; /* Engaging blue color */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.logo-text:hover {
+  color: #0056b3; /* Darker blue on hover for interactivity */
+}
+
+.center-buttons {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 20px;          /* space between buttons */
+  width: 60%;         /* make it wider */
+  max-width: 600px;   /* optional: limit maximum width */
+}
+
+.text-button {
+    --background: transparent;
+    --box-shadow: none;
+    --color: #000000;
+    font-style: italic;
+    border: none;
+    background: none;
+    font-weight: 500;
+    text-transform: none;
+    padding: 0;
+    min-width: unset;
+    height: auto;
+    transition: all 0.3s ease; /* Smooth transition for background and color */
+}
+
+.text-button.active {
+  position: relative;
+  z-index: 1; /* Keep text on top */
+  --color: #ffffff; 
+  font-weight: 600;
+}
+
+.text-button.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px; /* Extend to left */
+  width: calc(100% + 20px); /* Extend outside button */
+  height: 100%;
+  background: #007bff;
+  transform: skewX(-20deg); /* Slant effect */
+  border-radius: 5px;
+  z-index: -1; /* Behind text */
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.text-button.active:hover::before {
+  background: #0056b3;
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+}
+
+.text-button.active:hover {
+  --background: #0056b3; /* Darker blue when hovered for active button */
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4); /* Stronger glow effect on hover */
+}
+
+.text-button:hover {
+  --background: #f1f1f1; /* Light background for non-active buttons */
+  cursor: pointer;
+  color: #007bff; /* Change text color on hover */
+}
+
+.right-icons {
+  display: flex;
+  gap: 16px;
+}
+
+.icon-button {
+  --background: transparent;
+  --box-shadow: none;
+  --color: #007bff;
+  border: none;
+  background: none;
+  padding: 8px;
+  font-size: 24px;
+  transition: color 0.3s ease;
+}
+
+.icon-button:hover {
+  --color: #0056b3; /* Darker blue for icon on hover */
+  cursor: pointer;
+}

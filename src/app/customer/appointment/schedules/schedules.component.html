@@ -1,0 +1,13 @@
+<ion-text color="primary">
+  <h2 class="ion-text-center">Scheduled Appointments</h2>
+</ion-text>
+
+<ion-list>
+  <ion-item *ngFor="let schedule of schedules">
+    <ion-label>
+      <h3>{{ schedule.service }}</h3>
+      <p>Date: {{ schedule.date | date: 'shortDate' }} - {{ schedule.time }}</p>
+      <p>Location: {{ schedule.location }}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>

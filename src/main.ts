@@ -8,7 +8,12 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 
 import { addIcons } from 'ionicons';
-import { homeOutline, settingsOutline, logOutOutline, menuOutline, gridOutline, cogOutline, chevronBackOutline, chevronForwardOutline, calendarOutline, carSportOutline } from 'ionicons/icons';
+import { homeOutline, settingsOutline, 
+  logOutOutline, menuOutline, gridOutline, 
+  cogOutline, chevronBackOutline, chevronForwardOutline, 
+  calendarOutline, carSportOutline, arrowForwardOutline,
+  personCircleOutline, timeOutline, fileTrayFullOutline, peopleOutline,
+  statsChartOutline, eyeOutline, close } from 'ionicons/icons';
 
 addIcons({
   'car-sport-outline': carSportOutline,
@@ -20,7 +25,15 @@ addIcons({
   'home-outline': homeOutline,
   'settings-outline': settingsOutline,
   'log-out-outline': logOutOutline,
-  'menu-outline': menuOutline
+  'menu-outline': menuOutline,
+  'arrow-forward-outline': arrowForwardOutline,
+  'person-circle-outline' : personCircleOutline,
+  'time-outline' : timeOutline,
+  'file-tray-full-outline' : fileTrayFullOutline,
+  'people-outline' : peopleOutline,
+  'stats-chart-outline' : statsChartOutline,
+  'eye-outline' : eyeOutline,
+  'close' : close
 });
 
 bootstrapApplication(AppComponent, {

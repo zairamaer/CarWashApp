@@ -1,0 +1,88 @@
+.appointment-page {
+    background-color: #f6f7fb;
+  }
+  
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px;
+  width: 80%;
+}
+
+/* Default button style */
+.menu-buttons ion-button {
+  height: 50px;
+  border-radius: 25px;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  background-color: #f0f0f0; /* default gray background */
+  color: #505050;
+}
+
+/* Hover effect for unselected buttons */
+.menu-buttons ion-button:not([color="primary"]):hover {
+  background-color: #d9d9d9;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: scale(1.03); /* slight zoom */
+}
+
+/* Active/selected button */
+.menu-buttons ion-button[color="primary"] {
+  background-color: #00aaff; /* bright blue */
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 6px 15px rgba(0,170,255,0.4); /* subtle glow */
+  transform: scale(1.05); /* slightly larger */
+}
+
+/* Optional: smooth transition for scale and shadow */
+.menu-buttons ion-button {
+  transition: all 0.3s ease;
+}
+
+
+  
+  .content-box {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    min-height: 300px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .history-header {
+  position: relative;
+  margin-bottom: 1.5rem;
+  text-align: center; /* center the title */
+}
+
+/* Main title */
+.history-header h2 {
+  font-size: 60px;
+  font-weight: 700;
+  color: black; 
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2%;
+  z-index: 2;
+}
+
+/* Optional gray silhouette behind the title */
+.history-header::before {
+  content: "History";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 80px;
+  font-weight: 900;
+  color: rgba(0,0,0,0.05);
+  z-index: 1; /* behind the title */
+  pointer-events: none;
+  white-space: nowrap;
+}

@@ -1,0 +1,21 @@
+<ion-split-pane contentId="main-content">
+  <!-- Sidebar Component -->
+  <ion-menu contentId="main-content" type="overlay">
+    <ion-content>
+      <app-admin-sidebar></app-admin-sidebar>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Booking History</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <app-history-list></app-history-list>
+    </ion-content>
+  </div>
+</ion-split-pane>

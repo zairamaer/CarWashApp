@@ -46,6 +46,36 @@
       <ion-textarea [(ngModel)]="service.description" name="description"></ion-textarea>
     </ion-item>
 
+  <!-- Image Preview and Change -->
+  <ion-item>
+    <img 
+      *ngIf="service.imageUrl && !selectedImage" 
+      [src]="service.imageUrl" 
+      alt="Service Image" 
+      style="width: 100px; height: auto; border-radius: 4px;"
+    />
+    <img 
+      *ngIf="selectedImage" 
+      [src]="imageUrl" 
+      alt="Selected Image Preview" 
+      style="width: 100px; height: auto; border-radius: 4px;"
+    />
+  </ion-item>
+
+  <!-- Change Image Button -->
+  <ion-item lines="none">
+    <input 
+      type="file" 
+      accept="image/*" 
+      (change)="onImageSelected($event)" 
+      hidden 
+      #fileInput
+    />
+    <ion-button expand="block" fill="outline" (click)="fileInput.click()">
+      {{ selectedImage ? 'Change Selected Image' : 'Change Image' }}
+    </ion-button>
+  </ion-item>
+
     <!-- Price Input -->
     <ion-item>
       <ion-label position="floating">Price</ion-label>

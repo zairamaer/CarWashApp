@@ -1,4 +1,4 @@
-<ion-split-pane contentId="main-content">
+<ion-split-pane [when]="(isLargeScreen$ | async) ? 'lg' : 'false'" contentId="main-content">
   <!-- Sidebar Component -->
   <ion-menu contentId="main-content" type="overlay">
     <ion-content>

@@ -8,19 +8,13 @@
     <!-- Navigation Buttons -->
     <div class="center-buttons">
       <!-- Home Button -->
-      <ion-button class="text-button" 
-                  (click)="scrollToHome()" 
-                  [ngClass]="{ 'active': activeButton === 'home' }">Home</ion-button>
+      <ion-button class="text-button active" (click)="scrollToHome()">Home</ion-button>
 
       <!-- Services Button -->
-      <ion-button class="text-button" 
-                  (click)="scrollToServices()" 
-                  [ngClass]="{ 'active': activeButton === 'services' }">Services</ion-button>
+      <ion-button class="text-button" (click)="scrollToServices()">Services</ion-button>
 
       <!-- Quality Button -->
-      <ion-button class="text-button" 
-                  (click)="scrollToPricing()" 
-                  [ngClass]="{ 'active': activeButton === 'pricing' }">Quality</ion-button>
+      <ion-button class="text-button" (click)="scrollToPricing()">Quality</ion-button>
     </div>
 
     <!-- Login Button -->

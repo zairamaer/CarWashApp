@@ -28,12 +28,12 @@ export class ServiceService {
     });
   }
 
-  // Update an existing service
-  updateService(serviceId: number, serviceData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${serviceId}`, serviceData, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    });
+  // Update an existing service (with FormData and method override)
+  updateService(serviceId: number, serviceData: FormData): Observable<any> {
+    serviceData.append('_method', 'PUT'); // Laravel method spoofing
+    return this.http.post<any>(`${this.apiUrl}/${serviceId}`, serviceData);
   }
+
 
   // Delete a service
   deleteService(serviceId: number): Observable<any> {
@@ -58,7 +58,7 @@ export class ServiceService {
   }
 
   // Create a new service rate
-  createService(data: { vehicleSizeCode: string; serviceTypeID: number; description: string; price: string }): Observable<any> {
-    return this.http.post<any>(this.apiUrl, data);
-  }
+  createService(data: FormData): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data); // Let Angular auto-set headers
+  }  
 }

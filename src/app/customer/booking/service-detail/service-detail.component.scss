@@ -1,0 +1,406 @@
+.wizard-container {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Sidebar steps */
+.steps-sidebar {
+  margin-top: 100px;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  background: #f7f7f7;
+  transition: background 0.3s ease;
+}
+
+.step-item:hover {
+  background: #e9f5ff;
+}
+
+.step-item.active {
+  background: #00aaff;
+  color: white;
+  font-weight: bold;
+}
+
+.step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ccc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.step-item.active .step-circle {
+  background: white;
+  color: #00aaff;
+}
+
+/* Content side */
+.step-content {
+  flex: 1;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.step-content h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.step-content p {
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+/* Nav buttons */
+.wizard-nav {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Vehicle Type Options */
+.vehicle-type-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.vehicle-type {
+  background: #f9f9f9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.vehicle-type:hover {
+  background: #e9e9e9;
+}
+
+.vehicle-type.selected {
+  border: 2px solid #007bff;
+  background: #eef6ff;
+}
+
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.service-item:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+}
+
+.service-item .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-item .info strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #007aff;
+  margin-bottom: 0.25rem;
+}
+
+.service-item .info .meta {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.service-item button {
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.service-item button.selected {
+  background-color: #007aff;
+  color: white;
+}
+
+.service-item button:hover:not(.selected) {
+  background-color: #e0e0e0;
+}
+
+.schedule-appointment {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  flex-wrap: wrap;
+}
+
+/* Container for the calendar and time slots */
+.schedule-appointment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center; /* center both sections */
+  align-items: flex-start;
+  margin-top: 1.5rem;
+}
+
+/* Left side: calendar */
+.schedule-appointment ion-datetime {
+  flex: 1 1 250px;
+  --background: #fff;
+  --ion-color-primary: #007aff;
+  --ion-color-primary-contrast: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 1.2rem;
+  max-width: 320px;
+  margin: auto;
+}
+
+/* Container for the time slots */
+.time-slots {
+  display: flex;
+  flex-wrap: wrap;        /* wrap to next row if needed */
+  gap: 12px 16px;         /* vertical 12px, horizontal 16px spacing */
+  justify-content: center; /* align items to left */
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  min-height: 150px;
+}
+
+/* Label styling */
+.time-slots label {
+  width: 100%;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333;
+  text-align: left;
+}
+
+/* Individual time slot */
+.time-slots ion-item {
+  flex: 0 1 100px;      /* fixed width, flexible for wrapping */
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+  font-weight: 500;
+  border: 1px solid transparent;
+  text-align: center;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Hover */
+.time-slots ion-item:hover:not(.selected) {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* Selected slot */
+.time-slots ion-item.selected {
+  background-color: #007aff; /* solid blue */
+  color: black; /* text clearly visible */
+  font-weight: 600;
+  border: 1px solid #005bb5; /* subtle border */
+}
+
+.schedule-appointment p {
+  color: #ff4d4d;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.payment-step {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Roboto, sans-serif;
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #222;
+  }
+
+  p {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    color: #555;
+  }
+
+  .payment-summary {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    background-color: #f9f9f9;
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 0.95rem;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.total {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #1e88e5;
+      }
+
+      span:first-child {
+        font-weight: 500;
+        color: #555;
+      }
+    }
+  }
+
+  .payment-options {
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    ion-radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      ion-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 15px;
+        background-color: #fafafa;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
+
+        ion-label {
+          font-weight: 500;
+          color: #333;
+        }
+
+        ion-radio {
+          --color-checked: #1e88e5;
+        }
+      }
+    }
+  }
+}
+
+.confirmation-step {
+  text-align: center;
+  padding: 2rem;
+
+  .confirmation-letter {
+    background-color: #f6f7fb;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 2rem;
+    max-width: 500px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 28px;
+      color: #007aff;
+      margin-bottom: 1rem;
+    }
+
+    .confirmation-details {
+      text-align: left;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+
+      div {
+        margin-bottom: 0.5rem;
+        font-size: 16px;
+      }
+    }
+
+    .note {
+      font-size: 14px;
+      color: #555;
+      margin-top: 1rem;
+    }
+  }
+}
+
+
+
+    /* Responsive: stack left-right on small screens */
+    @media (max-width: 768px) {
+    .schedule-appointment {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .time-slots {
+        flex: 1 1 auto;
+    }
+}
+
+

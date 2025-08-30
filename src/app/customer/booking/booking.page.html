@@ -1,0 +1,20 @@
+<!-- Sidebar (Only for Small Screens) -->
+<app-home-sidebar *ngIf="!(screenSizeService.isLargeScreen$ | async)"></app-home-sidebar>
+
+<!-- Menu Header for Small Screens -->
+<ion-header *ngIf="!(screenSizeService.isLargeScreen$ | async)">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Car Wash App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Header (Only for Large Screens) -->
+<app-home-header *ngIf="screenSizeService.isLargeScreen$ | async"></app-home-header>
+
+<ion-content [fullscreen]="true" class="no-padding">
+  <!-- ✅ Pass the selectedService as input -->
+  <app-service-detail [service]="selectedService"></app-service-detail>
+</ion-content>

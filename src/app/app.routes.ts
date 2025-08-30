@@ -9,6 +9,12 @@ import { AdminServicesPage } from './admin-services/admin-services.page'; // Imp
 import { AdminAuthGuard } from './auth/admin-auth.guard'; // Import Admin Auth Guard
 import { AdminAppointmentsPage } from './admin/admin-appointments/admin-appointments.page';
 import {ServicesPage} from './customer/services/services.page';
+import { BookingPage } from './customer/booking/booking.page';
+import { AppointmentPage } from './customer/appointment/appointment.page';
+import { SchedulesPage } from './admin/schedules/schedules.page';
+import { BookingHistoryPage } from './admin/booking-history/booking-history.page';
+import { AdminCustomersPage } from './admin/admin-customers/admin-customers.page';
+
 
 export const routes: Routes = [
   {
@@ -30,6 +36,26 @@ export const routes: Routes = [
   {
     path: 'services',
     component: ServicesPage,
+  },
+  {
+    path: 'admin-customers',
+    component: AdminCustomersPage,
+  },
+  {
+    path: 'booking-history',
+    component: BookingHistoryPage,
+  },
+  {
+    path: 'schedules',
+    component: SchedulesPage,
+  },
+  {
+    path: 'booking',
+    component: BookingPage,
+  },
+  {
+    path: 'appointment',
+    component: AppointmentPage,
   },
   {
     path: 'admin-login',

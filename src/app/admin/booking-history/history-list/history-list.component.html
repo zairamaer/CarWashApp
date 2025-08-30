@@ -1,0 +1,31 @@
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row class="header">
+      <ion-col>Customer Name</ion-col>
+      <ion-col>Service</ion-col>
+      <ion-col>Vehicle</ion-col>
+      <ion-col>Date</ion-col>
+      <ion-col>Time</ion-col>
+      <ion-col>Total Price</ion-col>
+      <ion-col>Status</ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let history of bookingHistory" class="data-row">
+      <ion-col>{{ history.name }}</ion-col>
+      <ion-col>{{ history.service }}</ion-col>
+      <ion-col>{{ history.vehicle }}</ion-col>
+      <ion-col>{{ history.date | date:'fullDate' }}</ion-col>
+      <ion-col>{{ history.time }}</ion-col>
+      <ion-col>{{ history.total | currency:'PHP' }}</ion-col>
+      <ion-col>
+        <ion-badge 
+          [color]="
+            history.status === 'Completed' ? 'success' :
+            history.status === 'Cancelled' ? 'danger' : 'medium'
+          ">
+          {{ history.status }}
+        </ion-badge>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

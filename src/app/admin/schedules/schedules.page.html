@@ -1,0 +1,27 @@
+<ion-split-pane contentId="main-content">
+  <!-- Sidebar -->
+  <ion-menu contentId="main-content" type="overlay">
+    <ion-content>
+      <app-admin-sidebar></app-admin-sidebar>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <ion-header [translucent]="true">
+      <ion-toolbar>
+        <ion-title>Upcoming Schedules</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true">
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title size="large">schedules</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <app-schedule-list></app-schedule-list>
+    </ion-content>
+  </div>
+</ion-split-pane>

@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ service?.service_type?.serviceTypeName }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- ✅ Dynamic Image -->
+  <img 
+    *ngIf="service?.service_type?.serviceTypeImage"
+    [src]="getImageUrl(service.service_type.serviceTypeImage)"
+    alt="Service Image"
+    class="service-image" />
+
+  <!-- fallback kung walang image -->
+  <img 
+    *ngIf="!service?.service_type?.serviceTypeImage"
+    src="assets/quality-service.jpg"
+    alt="Default Image"
+    class="service-image" />
+
+  <div class="service-details">
+    <h2>{{ service?.vehicle_size?.vehicleSizeDescription }}</h2>
+    <p class="desc">{{ service?.service_type?.serviceTypeDescription }}</p>
+    <p class="price"><strong>Price:</strong> ₱{{ service?.price }}</p>
+  </div>
+
+  <ion-button expand="block" color="success" (click)="bookNow()">
+    Book Now
+  </ion-button>
+</ion-content>

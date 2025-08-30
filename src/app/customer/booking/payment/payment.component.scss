@@ -1,0 +1,73 @@
+.payment-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .section {
+    background-color: #f7f9fc;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+
+    h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      color: #555;
+      font-size: 1rem;
+    }
+
+    ion-list {
+      --ion-background-color: transparent;
+      margin: 0;
+      padding: 0;
+
+      ion-item {
+        --background: #fff;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        padding: 0.8rem 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+        h4 {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 500;
+          color: #222;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.9rem;
+          color: #777;
+        }
+      }
+    }
+
+    &.total {
+      background-color: #00aaff;
+      color: white;
+      text-align: center;
+      h3, p {
+        color: white;
+      }
+      p {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+/* Make scrollable on small screens */
+ion-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+}

@@ -1,0 +1,19 @@
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row class="header">
+      <ion-col>Name</ion-col>
+      <ion-col>Email</ion-col>
+      <ion-col>Phone</ion-col>
+      <ion-col>Total Appointments</ion-col>
+      <ion-col>Last Appointment</ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let customer of customers" class="data-row">
+      <ion-col>{{ customer.name }}</ion-col>
+      <ion-col>{{ customer.email }}</ion-col>
+      <ion-col>{{ customer.phone }}</ion-col>
+      <ion-col>{{ customer.totalAppointments }}</ion-col>
+      <ion-col>{{ customer.lastAppointment | date: 'mediumDate' }}</ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

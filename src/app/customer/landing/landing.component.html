@@ -22,32 +22,92 @@
     <div class="hero-text">
       <h1>Keep your Clean Cars Always</h1>
       <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-      <ion-button routerLink="/services" class="hero-btn">Explore Services</ion-button>
+      <ion-button routerLink="/login" class="hero-btn">Explore Services</ion-button>
     </div>
-    <img src="assets/car.jpg" alt="Car Image" class="hero-img" />
   </section>
 
-<!-- Services Section -->
-<section class="services" id="services">
-  <h2>Services</h2>
-  <div class="services-grid">
-    <div class="service-card">Car Wash</div>
-    <div class="service-card">Chemical Wash</div>
-    <div class="service-card">Steam Wash</div>
-  </div>
-</section>
+  <!-- Intro Section -->
+  <section class="intro-section">
+    <div class="intro-content">
+      <!-- Left Side -->
+      <div class="left-content">
+        <!-- Introduction -->
+        <div class="intro-text">
+          <h2>Who is GoWash?</h2>
+          <p>
+            GoWash is your trusted partner in keeping your car spotless and shining. 
+            We provide top-notch car wash and detailing services with professional care.
+          </p>
+        </div>
+
+        <!-- Two Checklists -->
+        <div class="checklists">
+          <!-- Best Car Wash -->
+          <div class="checklist">
+            <h3>✅ The Best Car Wash</h3>
+            <ul>
+              <li>High-quality cleaning products</li>
+              <li>Experienced staff</li>
+              <li>Affordable pricing</li>
+              <li>Eco-friendly washing</li>
+              <li>Fast and reliable service</li>
+            </ul>
+          </div>
+
+          <!-- Contact Us -->
+          <div class="checklist">
+            <h3>📞 Contact Us</h3>
+            <ul>
+              <li>Phone: +63 912 345 6789</li>
+              <li>Email: infogowash.com</li>
+              <li>Facebook: GoWash PH</li>
+              <li>Instagram: gowash</li>
+              <li>Visit us at Boss Baby Carwash & Detailing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side (Image) -->
+      <div class="right-content">
+          <img src="assets/cleaning.jpg" alt="GoWash Car Wash">
+        </div>
+      </div>
+  </section>
+
+
+  <!-- Services Section -->
+  <section class="services" id="services">
+    <h2>Our Services</h2>
+    <div class="services-grid">
+      <div class="service-card">Basic Car Wash</div>
+      <div class="service-card">Vacuum</div>
+      <div class="service-card">Armor</div>
+      <div class="service-card">Handwax</div>
+      <div class="service-card">Buffwax</div>
+      <div class="service-card">Engine Wash</div>
+      <div class="service-card">Interior Detailing</div>
+      <div class="service-card">Exterior Detailing</div>
+      <div class="service-card">Back to Zero</div>
+      <div class="service-card">Seat Cover</div>
+    </div>
+  </section>
+
 
 
   <!-- Process Section -->
   <section class="process">
-    <h2>Process</h2>
-    <div class="process-steps">
-      <div class="step"><span>1</span> Brake, Vacuum, and Clean</div>
-      <div class="step"><span>2</span> Clean Wheels & Tires</div>
-      <div class="step"><span>3</span> Wash, Clean & Treat</div>
-      <div class="step"><span>4</span> Polish & Wax</div>
+    <div class="overlay">
+      <h2>We know your time is valuable</h2>
+      <div class="process-steps">
+        <div class="step"><span>1</span> Brake, Vacuum, and Clean</div>
+        <div class="step"><span>2</span> Clean Wheels & Tires</div>
+        <div class="step"><span>3</span> Wash, Clean & Treat</div>
+        <div class="step"><span>4</span> Polish & Wax</div>
+      </div>
     </div>
   </section>
+
 
  <!-- Pricing Section -->
 <section class="pricing">
@@ -56,17 +116,23 @@
     <div class="price-card">
       <h3>Basic Cleaning</h3>
       <p>$24</p>
-      <ion-button fill="outline">More Info</ion-button>
+      <ion-button 
+      routerLink="/login"
+      fill="outline">More Info</ion-button>
     </div>
     <div class="price-card">
       <h3>Premium Cleaning</h3>
       <p>$44</p>
-      <ion-button fill="outline">More Info</ion-button>
+      <ion-button 
+      routerLink="/login"
+      fill="outline">More Info</ion-button>
     </div>
     <div class="price-card">
       <h3>Full Cleaning</h3>
       <p>$64</p>
-      <ion-button fill="outline">More Info</ion-button>
+      <ion-button 
+      routerLink="/login"
+      fill="outline">More Info</ion-button>
     </div>
   </div>
 </section>
@@ -87,7 +153,7 @@
       <li>✅ Satisfaction guaranteed</li>
     </ul>
 
-    <ion-button color="primary" routerLink="/services">View All Services</ion-button>
+    <ion-button color="primary" routerLink="/login">View All Services</ion-button>
   </div>
   <img src="assets/quality-service.jpg" alt="Service Quality" class="quality-img" />
 </section>

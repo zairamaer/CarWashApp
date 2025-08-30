@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; // Import AuthService
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-
-
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  standalone: true, // Ensure this is a standalone component
+  standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [IonicModule, FormsModule, RouterModule], // Add IonicModule and FormsModule
+  imports: [IonicModule, FormsModule, RouterModule],
 })
 export class LoginComponent {
   credentials = {
@@ -25,14 +24,13 @@ export class LoginComponent {
     this.authService.login(this.credentials).subscribe({
       next: (response) => {
         console.log('Login successful', response);
-        localStorage.setItem('access_token', response.access_token);
-        localStorage.setItem('user_name', response.data.name); // Store user name
+        // AuthService already saves token and user data
         this.router.navigate(['/home']); 
       },
       error: (error) => {
         console.error('Login failed', error);
+        // Optionally, show a toast or alert here
       }
     });
   }
-
 }

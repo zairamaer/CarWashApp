@@ -1,0 +1,14 @@
+<ion-text color="warning">
+  <h2 class="ion-text-center">Pending Payments</h2>
+</ion-text>
+
+<ion-list>
+  <ion-item *ngFor="let appointment of pendingAppointments">
+    <ion-label>
+      <h3>{{ appointment.service }}</h3>
+      <p>Amount: ₱{{ appointment.amount }}</p>
+      <p>Due: {{ appointment.dueDate | date: 'shortDate' }}</p>
+    </ion-label>
+    <ion-badge color="danger">{{ appointment.status }}</ion-badge>
+  </ion-item>
+</ion-list>

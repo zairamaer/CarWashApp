@@ -1,36 +1,65 @@
 .section-title {
+  position: relative;
   text-align: center;
-  padding: 1rem;
-  h2 {
-    font-size: 1.8rem;
-    margin-bottom: 0.3rem;
-  }
-  .highlight {
-    color: #007aff;
-    font-weight: 600;
-  }
+  margin-top: 4rem;
 }
+
+.section-title h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  display: inline-block; /* para sa pantay alignment */
+}
+
+.section-title::after {
+  content: "Our Services";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  font-size: 4rem;
+  font-weight: 800;
+  color: rgba(55, 55, 55, 0.05); 
+  z-index: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 
 .service-tabs {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 1rem 0.5rem;
+  margin: 1.5rem 0 2rem 0; // space below section title
+  gap: 0.5rem;
+
   ion-chip {
-    margin: 0.25rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    padding: 0 12px;
+    height: 36px;
+    border-radius: 18px;
+    transition: all 0.3s ease;
+
     &.selected {
-      font-weight: bold;
+      font-weight: 600;
       border: 2px solid #007aff;
+      background: rgba(0, 122, 255, 0.1);
     }
   }
 }
 
 ion-card {
-  margin: 0.75rem 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
   overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  }
 
   img {
     width: 100%;
@@ -38,19 +67,81 @@ ion-card {
     object-fit: cover;
   }
 
-  ion-card-title {
-    font-weight: 600;
-    font-size: 1.2rem;
+  ion-card-header {
+    padding: 1rem;
+    ion-card-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #007aff;
+    }
+    ion-note {
+      font-size: 0.8rem;
+      color: #777;
+    }
   }
 
-  ion-note {
-    font-size: 0.8rem;
-    color: #888;
-  }
+  ion-card-content {
+    padding: 0.8rem 1rem 1rem 1rem;
 
-  ion-card-content p {
-    font-size: 0.95rem;
-    color: #444;
-    margin: 0.3rem 0;
+    p {
+      font-size: 0.95rem;
+      color: #444;
+      margin: 0.4rem 0;
+      line-height: 1.4;
+    }
+
+    ion-button {
+      margin-top: 0.75rem;
+      --border-radius: 8px;
+      --padding-start: 1rem;
+      --padding-end: 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
   }
+}
+
+.pagination-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95); /* semi-transparent para di harsh */
+  padding: 6px 12px;
+  border-radius: 30px; /* pill style */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  backdrop-filter: blur(6px); /* ✅ glass effect */
+}
+
+.pagination-controls span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.pagination-controls ion-button {
+  --border-radius: 20px;
+  font-size: 0.8rem;
+  height: 32px;
+  padding: 0 12px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --background: #007aff;
+  --color: #fff;
+  --box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.pagination-controls ion-button[disabled] {
+  opacity: 0.5;
+  --background: #ccc;
+  --color: #666;
+}
+
+.pagination-controls ion-button:hover:not([disabled]) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 122, 255, 0.25);
 }

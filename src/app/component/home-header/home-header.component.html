@@ -1,0 +1,50 @@
+<ion-toolbar class="custom-toolbar" *ngIf="screenSizeService.isLargeScreen$ | async">
+  <div class="button-container">
+    <!-- Logo Section -->
+    <div class="logo-container">
+      <span class="logo-text">GoWash</span>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="center-buttons">
+      <!-- Home Button -->
+      <ion-button class="text-button"
+                  routerLink="/home"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }">
+        Home
+      </ion-button>
+
+      <!-- Services Button -->
+      <ion-button class="text-button"
+                  routerLink="/services"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }">
+        Services
+      </ion-button>
+
+      <!-- History Button -->
+      <ion-button class="text-button"
+                  routerLink="/appointment"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }">
+        History
+      </ion-button>
+    </div>
+
+    <!-- Right Section with User and Appointment Icons -->
+    <div class="right-icons">
+      <!-- Appointment Icon Button -->
+      <ion-button class="icon-button"
+                  routerLink="/appointment"
+                  routerLinkActive="active">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </ion-button>
+
+      <!-- User Icon Button -->
+      <ion-button class="icon-button">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-toolbar>

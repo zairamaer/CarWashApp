@@ -16,9 +16,9 @@ export class RegisterComponent {
   registrationData = {
     name: '',
     email: '',
-    phone: '',  // Make sure phone exists
+    phone: '',
     password: '',
-    password_confirmation: '' // Match Laravel's validation
+    password_confirmation: ''
   };
 
   errorMessage: string = '';
@@ -26,24 +26,25 @@ export class RegisterComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   register() {
-    if (!this.validateForm()) return; // Validate before sending
+    if (!this.validateForm()) return;
 
     this.authService.register(this.registrationData).subscribe({
       next: (response) => {
         console.log('Registration successful', response);
+        // AuthService already saves token and user data
         alert('Registration successful!');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']); // Navigate to home instead of login if desired
       },
       error: (error) => {
         console.error('Registration failed', error);
-        this.errorMessage = error?.error?.message || 'An error occurred. Please try again.';
+        this.errorMessage = error?.message || 'An error occurred. Please try again.';
       }
     });
   }
 
   validateForm(): boolean {
     const { name, email, phone, password, password_confirmation } = this.registrationData;
-    
+
     if (!name || !email || !phone || !password || !password_confirmation) {
       this.errorMessage = "All fields are required!";
       return false;

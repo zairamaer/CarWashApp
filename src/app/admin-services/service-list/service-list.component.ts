@@ -4,6 +4,9 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { ServiceService } from 'src/app/services/service.service';
 import { AdminEditComponent } from '../admin-edit/admin-edit.component';
 import { FormsModule } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-service-list',
@@ -19,7 +22,8 @@ export class ServiceListComponent implements OnInit {
   currentPage: number = 1; // Track current page
   totalPages: number = 1; // Total pages
 
-  constructor(private serviceService: ServiceService, private modalController: ModalController) {}
+  constructor(private serviceService: ServiceService, private modalController: ModalController, 
+    private alertController: AlertController, private toastController: ToastController) {}
 
   ngOnInit() {
     this.loadServices();
@@ -64,13 +68,13 @@ export class ServiceListComponent implements OnInit {
   }
 
   async openEditModal(service: any) {
-    console.log('Service Data:', service); // Debugging: check if the ID is present
-  
+    console.log('Service Data:', service);
+
     const modal = await this.modalController.create({
       component: AdminEditComponent,
-      componentProps: { service: { ...service, id: service.serviceRateID } } // Explicitly pass serviceRateID as id
+      componentProps: { service: { ...service, id: service.serviceRateID } }
     });
-  
+
     modal.onDidDismiss().then((data) => {
       if (data.data) {
         const index = this.services.findIndex(s => s.serviceRateID === data.data.serviceRateID);
@@ -78,11 +82,78 @@ export class ServiceListComponent implements OnInit {
           this.services[index] = data.data;
         }
         this.updateDisplayedServices();
+        this.presentToast('Service updated successfully ✅'); // 👈 Success toast
+      } else {
+        this.presentErrorToast('Update cancelled ❌'); // 👈 Error/Cancel toast
       }
     });
-  
+
     return await modal.present();
   }
-  
-  
+
+
+  getImageUrl(path: string): string {
+    return `http://localhost:8000/storage/${path}`;
+    // or use your deployed domain, e.g.
+    // return `https://yourdomain.com/storage/${path}`;
+  }  
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color: 'success',
+      position: 'bottom'
+    });
+    toast.present();
+  }
+
+  async presentErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color: 'danger',
+      position: 'bottom'
+    });
+    toast.present();
+  }
+
+
+  async confirmDelete(serviceId: number) {
+    const alert = await this.alertController.create({
+      header: 'Confirm Delete',
+      message: 'Are you sure you want to delete this service?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            this.deleteService(serviceId);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+
+  deleteService(serviceId: number) {
+    this.serviceService.deleteService(serviceId).subscribe({
+      next: () => {
+        this.services = this.services.filter(s => s.serviceRateID !== serviceId);
+        this.updateDisplayedServices();
+        console.log(`Service with ID ${serviceId} deleted successfully.`);
+        this.presentToast('Service deleted successfully'); // 👈 dito na
+      },
+      error: (err) => {
+        console.error('Error deleting service:', err);
+      }
+    });
+  }
+
 }

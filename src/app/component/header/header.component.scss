@@ -13,6 +13,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding: 20px;
   }
   
   .logo-container {
@@ -40,13 +41,16 @@
     display: flex;
     justify-content: center;
     gap: 16px;
-    flex-grow: 1; /* Take available space */
+    flex-grow: 1;
+    height: 100%;
+    position: relative; /* Needed for pseudo-element */
   }
   
   .text-button {
     --background: transparent;
     --box-shadow: none;
     --color: #000000;
+    font-style: italic;
     border: none;
     background: none;
     font-weight: 500;
@@ -57,23 +61,32 @@
     transition: all 0.3s ease; /* Smooth transition for background and color */
   }
   
-  .text-button.active {
-    --background: #007bff; /* Blue background for active button */
-    --color: #ffffff; /* White text for active button */
-    border-radius: 5px; /* Rounded corners for active button */
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); /* Soft blue glow for active button */
-  }
-  
-  .text-button.active:hover {
-    --background: #0056b3; /* Darker blue when hovered for active button */
-    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4); /* Stronger glow effect on hover */
-  }
-  
-  .text-button:hover {
-    --background: #f1f1f1; /* Light background for non-active buttons */
-    cursor: pointer;
-    color: #007bff; /* Change text color on hover */
-  }
+.text-button.active {
+  position: relative;
+  z-index: 1; /* Keep text on top */
+  --color: #ffffff; 
+  font-weight: 600;
+}
+
+.text-button.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px; /* Extend to left */
+  width: calc(100% + 20px); /* Extend outside button */
+  height: 100%;
+  background: #007bff;
+  transform: skewX(-20deg); /* Slant effect */
+  border-radius: 5px;
+  z-index: -1; /* Behind text */
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.text-button.active:hover::before {
+  background: #0056b3;
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+}
   
   .login-button {
     display: flex;

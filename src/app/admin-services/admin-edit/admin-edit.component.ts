@@ -19,6 +19,8 @@ export class AdminEditComponent implements OnInit, OnChanges {
   vehicleSizes: any[] = [];
   isServiceNameEditable: boolean = false; // Flag to control edit mode
   customServiceName: string = ''; // Custom service name input
+  selectedImage: File | null = null; // Selected image for upload
+  imageUrl: string | null = null;
 
   constructor(
     private modalController: ModalController,
@@ -26,26 +28,31 @@ export class AdminEditComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
+    // Load vehicle sizes and service types
     this.loadVehicleSizes();
     this.loadServiceTypes();
 
+    // Populate service data if available
     if (this.service && this.service.service_type) {
       this.service.serviceTypeID = this.service.service_type.serviceTypeID;
       this.service.serviceTypeName = this.service.service_type.serviceTypeName;
       this.service.description = this.service.service_type.serviceTypeDescription;
+      this.service.imageUrl = this.getImageUrl(this.service.service_type.serviceTypeImage);
     }
-    
+
     this.customServiceName = this.service.serviceTypeName; // Ensure initial value
     console.log('Editing Service:', this.service);
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // Handle changes to the service input
     if (changes['service'] && this.service) {
       console.log('Service changed:', this.service);
-      this.updateDescription();
+      this.updateDescription(); // Update description when service changes
     }
   }
 
+  // Load vehicle sizes from the service
   loadVehicleSizes() {
     this.serviceService.getVehicleSizes().subscribe({
       next: (data) => {
@@ -58,11 +65,12 @@ export class AdminEditComponent implements OnInit, OnChanges {
     });
   }
 
+  // Load service types from the service
   loadServiceTypes() {
     this.serviceService.getServiceTypes().subscribe({
       next: (data) => {
         this.serviceTypes = data;
-
+        // Update description if service type is selected
         if (this.service && this.service.serviceTypeID) {
           this.updateDescription();
         }
@@ -81,7 +89,7 @@ export class AdminEditComponent implements OnInit, OnChanges {
     if (!this.service || !this.service.serviceTypeID) return;
 
     const selectedType = this.serviceTypes.find(type => type.serviceTypeID === this.service.serviceTypeID);
-    
+
     if (selectedType) {
       this.service.service_type = { 
         serviceTypeID: selectedType.serviceTypeID,
@@ -97,28 +105,34 @@ export class AdminEditComponent implements OnInit, OnChanges {
     }
   }
 
+  // Dismiss the modal without saving changes
   dismissModal() {
     this.modalController.dismiss();
   }
 
+  // Save the changes to the service
   saveChanges() {
     if (!this.service.id) {
       console.error('Service ID is missing');
       this.showErrorAlert('Service ID is missing, unable to update.');
       return;
     }
-
-    const updatedData = {
-      vehicleSizeCode: this.service.vehicleSizeCode,
-      serviceTypeID: this.service.serviceTypeID,
-      price: this.service.price,
-      serviceTypeDescription: this.service.description,
-      serviceTypeName: this.isServiceNameEditable ? this.customServiceName : this.service.serviceTypeName
-    };
-
-    console.log('Sending to backend:', updatedData);
-
-    this.serviceService.updateService(this.service.id, updatedData).subscribe({
+  
+    const formData = new FormData();
+    formData.append('vehicleSizeCode', this.service.vehicleSizeCode);
+    formData.append('serviceTypeID', this.service.serviceTypeID);
+    formData.append('price', this.service.price);
+    formData.append(
+      'serviceTypeName',
+      this.isServiceNameEditable ? this.customServiceName : this.service.serviceTypeName
+    );
+    formData.append('serviceTypeDescription', this.service.description);
+  
+    if (this.selectedImage) {
+      formData.append('serviceTypeImage', this.selectedImage);
+    }
+  
+    this.serviceService.updateService(this.service.id, formData).subscribe({
       next: (updatedService) => {
         console.log('Response from backend:', updatedService);
         this.modalController.dismiss(updatedService);
@@ -128,14 +142,14 @@ export class AdminEditComponent implements OnInit, OnChanges {
         this.showErrorAlert('Failed to update service.');
       }
     });
-  }
+  }  
 
   /**
    * Toggle between select and edit modes for the service name
    */
   toggleServiceNameEditMode() {
     this.isServiceNameEditable = !this.isServiceNameEditable;
-    
+
     if (this.isServiceNameEditable) {
       this.customServiceName = this.service.serviceTypeName; // Initialize custom name input
     } else {
@@ -149,4 +163,23 @@ export class AdminEditComponent implements OnInit, OnChanges {
   private showErrorAlert(message: string) {
     alert(message);
   }
+
+  // Function to get the image URL
+  getImageUrl(path: string): string {
+    return `http://localhost:8000/storage/${path}`;
+  }
+
+  // Handle file selection for a new image
+  onImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImage = file;
+  
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }  
 }

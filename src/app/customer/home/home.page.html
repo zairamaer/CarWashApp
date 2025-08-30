@@ -1,13 +1,111 @@
-<ion-header>
+<!-- Sidebar for small screens -->
+<app-home-sidebar *ngIf="!(screenSizeService.isLargeScreen$ | async)"></app-home-sidebar>
+
+<!-- Header for small screens -->
+<ion-header *ngIf="!(screenSizeService.isLargeScreen$ | async)">
   <ion-toolbar>
-    <ion-title>Home</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Car Wash App</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="logout()">Logout</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <h2>Welcome to Your Dashboard!</h2>
-  <p>You are now logged in, <strong>{{ userName }}</strong>.</p>
+<!-- Header for large screens -->
+<app-home-header *ngIf="screenSizeService.isLargeScreen$ | async"></app-home-header>
+
+<!-- Main Content -->
+<ion-content class="home-content">
+<!-- Hero Section -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <h1>Welcome, {{ userName }}!</h1>
+    <p>Explore our premium services and keep your car sparkling clean.</p>
+    <ion-button routerLink="/services" class="hero-btn">Explore Services</ion-button>
+  </div>
+</section>
+
+  
+  <!-- Services Overview Section -->
+  <section class="services-overview">
+    <h3>Our Services</h3>
+    <div class="services-grid">
+      <!-- Sample service card; consider using an *ngFor if you have an array of services -->
+      <div class="service-card">
+        <img src="assets/quality-service.jpg" alt="Exterior Wash">
+        <div class="card-content">
+          <h4>Exterior Wash</h4>
+          <p>Refresh your car's look with our exterior cleaning service.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="assets/quality-service.jpg" alt="Interior Cleaning">
+        <div class="card-content">
+          <h4>Interior Cleaning</h4>
+          <p>Keep your car interior spotless with deep cleaning.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="assets/quality-service.jpg" alt="Detailing">
+        <div class="card-content">
+          <h4>Detailing</h4>
+          <p>Professional detailing services for a pristine finish.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Link to Services Page with Arrow -->
+    <div class="view-more">
+      <ion-button fill="clear" routerLink="/services">
+        <p>See more services</p>
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing-section">
+    <h3>Pricing Plans</h3>
+    <div class="pricing-grid">
+      <div class="pricing-card basic">
+        <h4>Basic</h4>
+        <p class="price">₱299</p>
+        <ul>
+          <li>Exterior Wash</li>
+          <li>Interior Vacuum</li>
+          <li>Window Cleaning</li>
+        </ul>
+        <ion-button expand="block" fill="outline" color="primary">Choose Plan</ion-button>
+      </div>
+      <div class="pricing-card premium">
+        <h4>Premium</h4>
+        <p class="price">₱499</p>
+        <ul>
+          <li>All Basic Services</li>
+          <li>Engine Bay Cleaning</li>
+          <li>Tire Shine</li>
+        </ul>
+        <ion-button expand="block" fill="solid" color="primary">Choose Plan</ion-button>
+      </div>
+      <div class="pricing-card deluxe">
+        <h4>Deluxe</h4>
+        <p class="price">₱699</p>
+        <ul>
+          <li>All Premium Services</li>
+          <li>Interior Detailing</li>
+          <li>Polish & Wax</li>
+        </ul>
+        <ion-button expand="block" fill="outline" color="primary">Choose Plan</ion-button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call-to-Action Section -->
+  <section class="call-to-action">
+    <h3>Ready for a shine?</h3>
+    <ion-button expand="block" color="primary">Book a Service</ion-button>
+  </section>
 </ion-content>

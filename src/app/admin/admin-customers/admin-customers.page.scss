@@ -1,0 +1,13 @@
+ion-split-pane {
+    --side-width: 280px; /* Default width */
+  
+    @media (max-width: 768px) {
+      --side-width: 200px; /* Smaller width on small screens */
+    }
+  }
+
+  ion-content {
+    --overflow: hidden;
+}
+
+  
