@@ -1,29 +1,97 @@
-<ion-content class="ion-padding">
-  <ion-grid>
-    <ion-row class="header">
-      <ion-col>Name</ion-col>
-      <ion-col>Email</ion-col>
-      <ion-col>Service Name</ion-col>
-      <ion-col>Vehicle Size</ion-col>
-      <ion-col>Price</ion-col>
-      <ion-col>Appointment Date</ion-col>
-      <ion-col>Status</ion-col>
-      <ion-col>Notes</ion-col>
-    </ion-row>
+   <ion-content class="ion-padding">
+        <!-- Customer List View -->
+        <div *ngIf="!selectedCustomer" class="customers-container">
+            <div class="page-header">
+                <div class="header-content">
+                    <h2>Customer Appointments</h2>
+                    <p class="subtitle">Select a customer to view their appointments</p>
+                </div>
+            </div>
+            
+            <ion-searchbar 
+                placeholder="Search customers..." 
+                [(ngModel)]="searchTerm"
+                (ionInput)="filterCustomers($event)">
+            </ion-searchbar>
+            
+            <div class="customers-grid">
+                <div *ngFor="let customer of filteredCustomers" 
+                     class="customer-card" 
+                     (click)="selectCustomer(customer)">
+                    <div class="customer-avatar">
+                        {{ getInitials(customer.name) }}
+                    </div>
+                    <div class="customer-info">
+                        <h3>{{ customer.name }}</h3>
+                        <p class="email">{{ customer.email }}</p>
+                        <div class="appointment-count">
+                            <ion-badge color="primary">
+                                {{ getAppointmentCount(customer.email) }} appointments
+                            </ion-badge>
+                        </div>
+                    </div>
+                    <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+                </div>
+            </div>
+        </div>
 
-    <ion-row *ngFor="let appointment of appointments" class="data-row">
-      <ion-col>{{ appointment.name }}</ion-col>
-      <ion-col>{{ appointment.email }}</ion-col>
-      <ion-col>{{ appointment.serviceName }}</ion-col>
-      <ion-col>{{ appointment.vehicleSize }}</ion-col>
-      <ion-col>{{ appointment.price | currency:'PHP' }}</ion-col>
-      <ion-col>{{ appointment.appointmentDate | date:'short' }}</ion-col>
-      <ion-col>
-        <ion-badge [color]="appointment.status === 'Confirmed' ? 'success' : 'warning'">
-          {{ appointment.status }}
-        </ion-badge>
-      </ion-col>
-      <ion-col>{{ appointment.notes }}</ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+        <!-- Customer Appointments Detail View -->
+        <div *ngIf="selectedCustomer" class="appointments-detail">
+            <div class="detail-header">
+                <ion-button fill="clear" (click)="goBack()" class="back-button">
+                    <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+                    Back to Customers
+                </ion-button>
+                
+                <div class="customer-detail-info">
+                    <div class="customer-avatar large">
+                        {{ getInitials(selectedCustomer.name) }}
+                    </div>
+                    <div>
+                        <h2>{{ selectedCustomer.name }}</h2>
+                        <p class="email">{{ selectedCustomer.email }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="appointments-list">
+                <h3 class="title">Appointments History</h3>
+                
+                <div *ngFor="let appointment of getCustomerAppointments(selectedCustomer.email)" 
+                     class="appointment-card">
+                    <div class="appointment-header">
+                        <div class="service-info">
+                            <h4>{{ appointment.service_type.serviceTypeName }}</h4>
+                            <p class="vehicle-size">{{ appointment.service_rate.vehicleSize }}</p>
+                        </div>
+                        <div class="appointment-status">
+                            <ion-badge [color]="appointment.status === 'Confirmed' ? 'success' : 'warning'">
+                                {{ appointment.status }}
+                            </ion-badge>
+                        </div>
+                    </div>
+                    
+                    <div class="appointment-details">
+                        <div class="detail-item">
+                            <ion-icon name="calendar-outline"></ion-icon>
+                            <span>{{ appointment.appointmentDateTime | date:'medium' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <ion-icon name="cash-outline"></ion-icon>
+                            <span>{{ appointment.service_rate.price | currency:'PHP' }}</span>
+                        </div>
+                        <div class="detail-item" *ngIf="appointment.notes">
+                            <ion-icon name="document-text-outline"></ion-icon>
+                            <span>{{ appointment.notes }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div *ngIf="getCustomerAppointments(selectedCustomer.email).length === 0" 
+                     class="no-appointments">
+                    <ion-icon name="calendar-outline" size="large"></ion-icon>
+                    <p>No appointments found for this customer</p>
+                </div>
+            </div>
+        </div>
+    </ion-content>
