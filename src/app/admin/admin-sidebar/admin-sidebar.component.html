@@ -1,65 +1,41 @@
-<ion-content>
-  <ion-list>
-    <!-- Admin Profile Section -->
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <img src="assets/icon/admin.png" alt="Admin Profile">
-      </ion-avatar>
-      <ion-label>
-        <h3>Admin</h3>
-        <p>Administrator</p>
-      </ion-label>
-    </ion-item>
+<ion-content class="sidebar-content">
+  <!-- Header Section -->
+  <div class="sidebar-header">
+    <div class="admin-avatar">
+      <ion-icon name="person"></ion-icon>
+    </div>
+    <div class="admin-info">
+      <h3>Admin</h3>
+      <p>Administrator</p>
+    </div>
+  </div>
 
-    <ion-menu-toggle auto-hide="false">
-      <ion-item routerLink="/admin-dashboard" routerDirection="root" routerLinkActive="active">
-        <ion-icon name="grid-outline" slot="start"></ion-icon>
-        <ion-label>Dashboard</ion-label>
-      </ion-item>
-    </ion-menu-toggle>
+  <!-- Menu Section -->
+  <ion-list class="sidebar-menu">
+    <ng-container *ngFor="let item of menuItems; let i = index">
 
-    <ion-menu-toggle auto-hide="false">
-      <ion-item routerLink="/admin-services" routerDirection="root" routerLinkActive="active">
-        <ion-icon name="cog-outline" slot="start"></ion-icon>
-        <ion-label>Services</ion-label>
-      </ion-item>
-    </ion-menu-toggle>
-
-    <ion-menu-toggle auto-hide="false">
-      <ion-item routerLink="/admin-appointments" routerDirection="root" routerLinkActive="active">
-        <ion-icon name="calendar-outline" slot="start"></ion-icon>
-        <ion-label>Appointments</ion-label>
-      </ion-item>
-    </ion-menu-toggle>
-
-    <ion-menu-toggle auto-hide="false">
-      <ion-item routerLink="/schedules" routerDirection="root" routerLinkActive="active">
-        <ion-icon name="time-outline" slot="start"></ion-icon>
-        <ion-label>Upcoming Schedules</ion-label>
-      </ion-item>
-    </ion-menu-toggle>
-    
-    <ion-menu-toggle auto-hide="false">
-      <ion-item routerLink="/booking-history" routerDirection="root" routerLinkActive="active">
-        <ion-icon name="file-tray-full-outline" slot="start"></ion-icon>
-        <ion-label>Booking History</ion-label>
-      </ion-item>
-    </ion-menu-toggle>
-    
-    <ion-menu-toggle auto-hide="false">
-      <ion-item routerLink="/admin-customers" routerDirection="root" routerLinkActive="active">
-        <ion-icon name="people-outline" slot="start"></ion-icon>
-        <ion-label>Customers</ion-label>
-      </ion-item>
-    </ion-menu-toggle>
-    
-    <ion-menu-toggle auto-hide="false">
-      <ion-item routerLink="/admin-reports" routerDirection="root" routerLinkActive="active">
-        <ion-icon name="stats-chart-outline" slot="start"></ion-icon>
-        <ion-label>Reports</ion-label>
-      </ion-item>
-    </ion-menu-toggle>
-    
-
+      <ion-menu-toggle auto-hide="false">
+        <ion-item 
+          [routerLink]="item.route" 
+          routerDirection="root" 
+          routerLinkActive="active"
+          [class.active]="item.active"
+          (click)="onMenuItemClick(item)"
+          button
+          class="menu-item"
+          [style.animation-delay]="i * 0.05 + 's'">
+          <ion-icon [name]="item.icon" slot="start" class="menu-icon"></ion-icon>
+          <ion-label class="menu-label">{{ item.title }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ng-container>
   </ion-list>
+
+  <!-- Footer Section -->
+  <div class="sidebar-footer">
+    <ion-item button class="logout-item">
+      <ion-icon name="log-out-outline" slot="start" class="logout-icon"></ion-icon>
+      <ion-label class="logout-label">Logout</ion-label>
+    </ion-item>
+  </div>
 </ion-content>
