@@ -26,10 +26,7 @@ export class ServiceDetailComponent {
     });
   }
 
-  // ✅ Same approach as service-list
-  getImageUrl(path: string): string {
-    return `http://localhost:8000/storage/${path}`;
-    // or deployed version:
-    // return `https://yourdomain.com/storage/${path}`;
+  getImageUrl(path: string | undefined): string {
+    return path || '';
   }
 }

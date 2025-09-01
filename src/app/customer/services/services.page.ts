@@ -107,7 +107,7 @@ export class ServicesPage implements OnInit {
   }
 
   getImageUrl(path: string): string {
-    return `http://localhost:8000/storage/${path}`;
+    return path || ''; // just return the URL from API
   }
 }
 
