@@ -18,16 +18,16 @@
   <!-- Section Title -->
   <div class="section-title">
     <h2>Our Services</h2>
-    <p>Discover Our <span class="highlight">Car Wash Services</span></p>
+    <p>Discover Our Car Wash Services</p>
   </div>
 
   <!-- Filter Chips -->
-  <div class="service-tabs">
+  <div class="filter-container">
     <ion-chip
       [outline]="selectedSize !== 'ALL'"
       color="primary"
       (click)="selectSize('ALL')"
-      [class.selected]="selectedSize === 'ALL'"
+      [class.active]="selectedSize === 'ALL'"
     >
       All
     </ion-chip>
@@ -37,58 +37,63 @@
       [outline]="selectedSize !== size.vehicleSizeCode"
       color="primary"
       (click)="selectSize(size.vehicleSizeCode)"
-      [class.selected]="selectedSize === size.vehicleSizeCode"
+      [class.active]="selectedSize === size.vehicleSizeCode"
     >
       {{ size.vehicleSizeDescription }}
     </ion-chip>
   </div>
 
   <!-- Service Cards Grid -->
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let service of displayedServices">
-        <ion-card>
-          <!-- ✅ Dynamic Image -->
-          <img 
-            *ngIf="service?.service_type?.serviceTypeImage"
-            [src]="getImageUrl(service.service_type.serviceTypeImage)"
-            alt="Service Image"
-            class="service-image" />
+  <div class="services-grid">
+    <div class="service-card" *ngFor="let service of displayedServices">
+      <!-- Service Image -->
+      <div class="card-image">
+        <img 
+          *ngIf="service?.service_type?.serviceTypeImage"
+          [src]="getImageUrl(service.service_type.serviceTypeImage)"
+          alt="Service Image" />
+        <img 
+          *ngIf="!service?.service_type?.serviceTypeImage"
+          src="assets/quality-service.jpg"
+          alt="Default Service Image" />
+      </div>
 
-          <!-- fallback kung walang image -->
-          <img 
-            *ngIf="!service?.service_type?.serviceTypeImage"
-            src="assets/quality-service.jpg"
-            alt="Default Service Image"
-            class="service-image" />
-
-          <ion-card-header>
-            <ion-card-title>{{ service.service_type.serviceTypeName }}</ion-card-title>
-            <ion-note>{{ service.vehicle_size.vehicleSizeDescription }}</ion-note>
-          </ion-card-header>
-          <ion-card-content>
-            <p>{{ service.service_type.serviceTypeDescription }}</p>
-            <p><strong>Price:</strong> ₱{{ service.price }}</p>
-            <ion-button expand="block" fill="outline" size="small" color="primary"
-              (click)="openServiceDetail(service)">
-              Learn More
-            </ion-button>          
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <!-- 🔹 Pagination Controls -->
-    <div class="pagination-controls">
-      <ion-button fill="outline" [disabled]="currentPage === 1" (click)="changePage(false)">
-        Previous
-      </ion-button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <ion-button fill="outline" [disabled]="currentPage === totalPages" (click)="changePage(true)">
-        Next
-      </ion-button>
+      <!-- Service Info -->
+      <div class="card-content">
+        <div class="service-header">
+          <h3>{{ service.service_type.serviceTypeName }}</h3>
+          <span class="vehicle-type">{{ service.vehicle_size.vehicleSizeDescription }}</span>
+        </div>
+        
+        <p class="description">{{ service.service_type.serviceTypeDescription }}</p>
+        
+        <div class="card-footer">
+          <span class="price">₱{{ service.price }}</span>
+          <ion-button 
+            size="small" 
+            fill="outline" 
+            (click)="openServiceDetail(service)">
+            Learn More
+          </ion-button>
+        </div>
+      </div>
     </div>
+  </div>
 
-
+  <!-- Pagination -->
+  <div class="pagination">
+    <ion-button 
+      fill="clear" 
+      [disabled]="currentPage === 1" 
+      (click)="changePage(false)">
+      Previous
+    </ion-button>
+    <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+    <ion-button 
+      fill="clear" 
+      [disabled]="currentPage === totalPages" 
+      (click)="changePage(true)">
+      Next
+    </ion-button>
+  </div>
 </ion-content>

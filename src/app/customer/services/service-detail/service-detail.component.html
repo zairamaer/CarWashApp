@@ -1,37 +1,90 @@
-<ion-header>
+<ion-header class="modern-header">
   <ion-toolbar>
-    <ion-title>{{ service?.service_type?.serviceTypeName }}</ion-title>
+    <ion-title class="header-title">{{ service?.service_type?.serviceTypeName }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">
-        <ion-icon name="close"></ion-icon>
+      <ion-button fill="clear" (click)="closeModal()" class="close-btn">
+        <ion-icon name="close-outline" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-
-  <!-- ✅ Dynamic Image -->
-  <img 
-    *ngIf="service?.service_type?.serviceTypeImage"
-    [src]="getImageUrl(service.service_type.serviceTypeImage)"
-    alt="Service Image"
-    class="service-image" />
-
-  <!-- fallback kung walang image -->
-  <img 
-    *ngIf="!service?.service_type?.serviceTypeImage"
-    src="assets/quality-service.jpg"
-    alt="Default Image"
-    class="service-image" />
-
-  <div class="service-details">
-    <h2>{{ service?.vehicle_size?.vehicleSizeDescription }}</h2>
-    <p class="desc">{{ service?.service_type?.serviceTypeDescription }}</p>
-    <p class="price"><strong>Price:</strong> ₱{{ service?.price }}</p>
+<ion-content class="service-content">
+  <!-- Clean Image Section -->
+  <div class="image-section">
+    <img 
+      *ngIf="service?.service_type?.serviceTypeImage" 
+      [src]="getImageUrl(service.service_type.serviceTypeImage)" 
+      alt="Service Image" 
+      class="service-image"
+    />
+    <img 
+      *ngIf="!service?.service_type?.serviceTypeImage" 
+      src="assets/quality-service.jpg" 
+      alt="Default Service Image" 
+      class="service-image"
+    />
   </div>
 
-  <ion-button expand="block" color="success" (click)="bookNow()">
-    Book Now
-  </ion-button>
+  <!-- Main Content -->
+  <div class="content-section">
+    <!-- Service Title -->
+    <div class="title-section">
+      <h1 class="service-title">{{ service?.vehicle_size?.vehicleSizeDescription }}</h1>
+      <div class="availability-badge">Available</div>
+    </div>
+
+    <!-- Service Description -->
+    <div class="description-section">
+      <h3 class="section-label">About This Service</h3>
+      <p class="description-text">{{ service?.service_type?.serviceTypeDescription }}</p>
+    </div>
+
+    <!-- Service Details -->
+    <div class="details-section">
+      <h3 class="section-label">Service Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <ion-icon name="car" class="info-icon"></ion-icon>
+          <div class="info-content">
+            <span class="info-label">Vehicle Size</span>
+            <span class="info-value">{{ service?.vehicle_size?.vehicleSizeDescription }}</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <ion-icon name="build" class="info-icon"></ion-icon>
+          <div class="info-content">
+            <span class="info-label">Service Type</span>
+            <span class="info-value">{{ service?.service_type?.serviceTypeName }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="pricing-section">
+      <h3 class="section-label">Pricing</h3>
+      <div class="price-card">
+        <div class="price-content">
+          <span class="price-label">Service Fee</span>
+          <div class="price-amount">
+            ₱{{ service?.price }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book Button -->
+    <div class="book-section">
+      <ion-button 
+        expand="block" 
+        size="large"
+        class="book-button"
+        (click)="bookNow()"
+      >
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        Book This Service Now
+      </ion-button>
+    </div>
+  </div>
 </ion-content>
