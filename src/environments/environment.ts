@@ -3,8 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  apiUrl: 'http://127.0.0.1:8000/api' // local dev
+  production: false, 
+  apiUrl: 'https://api.gowashapp.online/api',       // Live API
+  storageUrl: 'https://api.gowashapp.online/storage', // Live storage
 };
 
 

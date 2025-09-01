@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ServiceService {
-  private apiUrl = 'http://127.0.0.1:8000/api/service-rates'; // Replace with your actual API URL
-  private vehicleSizeUrl = 'http://127.0.0.1:8000/api/vehicle-sizes';
-  private serviceTypesUrl = 'http://127.0.0.1:8000/api/service-types'; 
+  private apiUrl = 'https://api.gowashapp.online/api/service-rates'; // Replace with your actual API URL
+  private vehicleSizeUrl = 'https://api.gowashapp.online/api/vehicle-sizes';
+  private serviceTypesUrl = 'https://api.gowashapp.online/api/service-types'; 
 
   constructor(private http: HttpClient) {}
   

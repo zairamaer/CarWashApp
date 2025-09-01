@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://4938ec116eb7.ngrok-free.app/api' // ngrok/production
+  apiUrl: 'https://api.gowashapp.online/api',
+  storageUrl: 'https://api.gowashapp.online/storage',
 };
+
