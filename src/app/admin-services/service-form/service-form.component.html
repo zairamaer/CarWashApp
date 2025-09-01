@@ -1,73 +1,141 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Create Service</ion-title>
+<ion-header class="form-header">
+  <ion-toolbar class="form-toolbar">
+    <ion-title class="form-title">Create Service</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">Close</ion-button>
+      <ion-button (click)="closeModal()" class="close-button">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Close
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <form (ngSubmit)="saveService()">
+<ion-content class="form-content">
+  <div class="form-wrapper">
+    <form (ngSubmit)="saveService()" class="service-form">
 
-    <!-- Multi-Select for Vehicle Size (Displays Only vehicleSizeCode) -->
-    <ion-item>
-      <ion-label position="stacked">Vehicle Size</ion-label>
-      <ion-select [(ngModel)]="selectedVehicleSizes" name="vehicleSizes" multiple="true" placeholder="Select vehicle sizes">
-        <ion-select-option *ngFor="let size of vehicleSizes" [value]="size.vehicleSizeCode">
-          {{ size.vehicleSizeCode }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
+      <!-- Multi-Select for Vehicle Size -->
+      <ion-item class="form-item">
+        <ion-label position="stacked" class="form-label">
+          Vehicle Size <span class="required-asterisk">*</span>
+        </ion-label>
+        <ion-select 
+          [(ngModel)]="selectedVehicleSizes" 
+          name="vehicleSizes" 
+          multiple="true" 
+          placeholder="Select vehicle sizes"
+          class="form-select">
+          <ion-select-option *ngFor="let size of vehicleSizes" [value]="size.vehicleSizeCode">
+            {{ size.vehicleSizeCode }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
-    <!-- Checkbox to enable adding a new Service Type -->
-    <ion-item>
-      <ion-label>Add New Service Type</ion-label>
-      <ion-checkbox [(ngModel)]="isAddingNewServiceType" name="isAddingNewServiceType" (ionChange)="toggleNewServiceType()"></ion-checkbox>
-    </ion-item>
+      <!-- Section Divider -->
+      <div class="section-divider"></div>
 
-    <!-- Dropdown for Existing Service Type (Disabled when adding a new one) -->
-    <ion-item *ngIf="!isAddingNewServiceType">
-      <ion-label position="stacked">Service Type</ion-label>
-      <ion-select [(ngModel)]="selectedServiceTypeID" name="serviceTypeID" (ionChange)="onServiceTypeChange()" placeholder="Select service type">
-        <ion-select-option *ngFor="let type of serviceTypes" [value]="type.serviceTypeID">
-          {{ type.serviceTypeName }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
+      <!-- Checkbox to enable adding a new Service Type -->
+      <ion-item class="checkbox-item">
+        <ion-label class="checkbox-label">Add New Service Type</ion-label>
+        <ion-checkbox 
+          [(ngModel)]="isAddingNewServiceType" 
+          name="isAddingNewServiceType" 
+          (ionChange)="toggleNewServiceType()"
+          class="form-checkbox"
+          slot="end">
+        </ion-checkbox>
+      </ion-item>
 
-    <!-- Input for New Service Type (Shown when checkbox is checked) -->
-    <ion-item *ngIf="isAddingNewServiceType">
-      <ion-label position="stacked">New Service Type</ion-label>
-      <ion-input [(ngModel)]="newServiceTypeName" name="newServiceTypeName" placeholder="Enter new service type"></ion-input>
-    </ion-item>
+      <!-- Dropdown for Existing Service Type -->
+      <ion-item *ngIf="!isAddingNewServiceType" class="form-item">
+        <ion-label position="stacked" class="form-label">
+          Service Type <span class="required-asterisk">*</span>
+        </ion-label>
+        <ion-select 
+          [(ngModel)]="selectedServiceTypeID" 
+          name="serviceTypeID" 
+          (ionChange)="onServiceTypeChange()" 
+          placeholder="Select service type"
+          class="form-select">
+          <ion-select-option *ngFor="let type of serviceTypes" [value]="type.serviceTypeID">
+            {{ type.serviceTypeName }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
-    <!-- Auto-Filled Description -->
-    <ion-item>
-      <ion-label position="stacked">Description</ion-label>
-      <ion-textarea [(ngModel)]="description" name="description" placeholder="Service description will appear here"></ion-textarea>
-    </ion-item>
+      <!-- Input for New Service Type -->
+      <ion-item *ngIf="isAddingNewServiceType" class="form-item">
+        <ion-label position="stacked" class="form-label">
+          New Service Type <span class="required-asterisk">*</span>
+        </ion-label>
+        <ion-input 
+          [(ngModel)]="newServiceTypeName" 
+          name="newServiceTypeName" 
+          placeholder="Enter new service type"
+          class="form-input">
+        </ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Price</ion-label>
-      <ion-input [(ngModel)]="price" name="price" type="number" placeholder="Enter price" required></ion-input>
-    </ion-item>
+      <!-- Auto-Filled Description -->
+      <ion-item class="form-item">
+        <ion-label position="stacked" class="form-label">Description</ion-label>
+        <ion-textarea 
+          [(ngModel)]="description" 
+          name="description" 
+          placeholder="Service description will appear here"
+          class="form-textarea">
+        </ion-textarea>
+      </ion-item>
 
-    <ion-item *ngIf="!isAddingNewServiceType">
-      <ion-label position="stacked">Upload Image</ion-label>
-      <input type="file" (change)="onFileSelected($event)" />
-    </ion-item>    
+      <!-- Price Input -->
+      <ion-item class="form-item">
+        <ion-label position="stacked" class="form-label">
+          Price (₱) <span class="required-asterisk">*</span>
+        </ion-label>
+        <ion-input 
+          [(ngModel)]="price" 
+          name="price" 
+          type="number" 
+          placeholder="0.00" 
+          required
+          class="form-input">
+        </ion-input>
+      </ion-item>
 
-    <ion-button expand="full" color="primary" type="submit">Save Service</ion-button>
-  </form>
+      <!-- Upload Image -->
+      <ion-item *ngIf="!isAddingNewServiceType" class="form-item">
+        <ion-label position="stacked" class="form-label">Upload Image</ion-label>
+        <div class="file-input-wrapper">
+          <input type="file" (change)="onFileSelected($event)" class="file-input" id="file-input" />
+          <label for="file-input" class="file-input-label">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            <span>Choose Image File</span>
+          </label>
+        </div>
+      </ion-item>
 
-  <!-- Preview of Added Services -->
-  <ion-list *ngIf="addedServices.length > 0">
-    <ion-item *ngFor="let service of addedServices">
-      <ion-label>
-        <h2>{{ service.vehicleSizeCode }}</h2>
-        <p>{{ service.serviceType.serviceTypeName }} - ${{ service.price }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+      <!-- Save Button -->
+      <ion-button expand="full" color="primary" type="submit" class="save-button">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        Save Service
+      </ion-button>
+    </form>
+
+    <!-- Preview of Added Services -->
+    <div *ngIf="addedServices.length > 0" class="preview-section">
+      <h3 class="preview-title">
+        <ion-icon name="eye-outline"></ion-icon>
+        Service Preview ({{ addedServices.length }})
+      </h3>
+      <ion-list class="preview-list">
+        <ion-item *ngFor="let service of addedServices; let i = index" class="preview-item">
+          <ion-label class="preview-label">
+            <h2>{{ service.vehicleSizeCode }} Vehicle</h2>
+            <p>{{ service.serviceType.serviceTypeName }} - ₱{{ service.price | number:'1.2-2' }}</p>
+          </ion-label>
+          <ion-badge slot="end" color="primary">#{{ i + 1 }}</ion-badge>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
 </ion-content>

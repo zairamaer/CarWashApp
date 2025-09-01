@@ -165,8 +165,8 @@ export class AdminEditComponent implements OnInit, OnChanges {
   }
 
   // Function to get the image URL
-  getImageUrl(path: string): string {
-    return `http://localhost:8000/storage/${path}`;
+  getImageUrl(path: string | undefined): string {
+    return path || '';
   }
 
   // Handle file selection for a new image

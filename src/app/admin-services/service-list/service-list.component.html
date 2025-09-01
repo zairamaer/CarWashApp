@@ -1,60 +1,166 @@
-<ion-content>
-  <ion-grid class="custom-grid">
+<ion-content class="ion-padding">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Service Management</h1>
+      <p class="page-subtitle">Manage your car wash services and pricing</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-card">
+        <div class="stat-number">{{ services.length }}</div>
+        <div class="stat-label">Total Services</div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Table Header -->
-    <ion-row class="header-row">
-      <ion-col class="head-col">Vehicle Size</ion-col>
-      <ion-col class="head-col">Service Name</ion-col>
-      <ion-col class="head-col">Description</ion-col>
-      <ion-col class="head-col">Image</ion-col>
-      <ion-col class="head-col">Price</ion-col>
-      <ion-col class="head-col">Actions</ion-col>
-    </ion-row>
+  <!-- Search and Filters -->
+  <div class="controls-section">
+    <ion-searchbar 
+      placeholder="Search services..." 
+      [(ngModel)]="searchTerm"
+      (ionInput)="filterServices($event)"
+      class="custom-searchbar">
+    </ion-searchbar>
+    
+  <div class="filter-controls">
+        <ion-select 
+          placeholder="Vehicle Size" 
+          [(ngModel)]="selectedVehicleSize"
+          (ionChange)="applyFilters()"
+          class="filter-select">
+          <ion-select-option value="">All Sizes</ion-select-option>
+          <ion-select-option 
+            *ngFor="let size of vehicleSizes" 
+            [value]="size.vehicleSizeCode">
+            {{ size.vehicleSizeDescription }}
+          </ion-select-option>
+        </ion-select>
+    </div>
+  </div>
 
-    <!-- Data Rows -->
-    <ion-row 
-      *ngFor="let service of displayedServices; let i = index" 
-      [class.alternate-row]="i % 2 === 0" 
-      class="data-row"
-      tabindex="0"
-    >
-      <ion-col>{{ service.vehicleSizeCode }}</ion-col>
-      <ion-col>{{ service.service_type.serviceTypeName }}</ion-col>
-      <ion-col>{{ service.service_type.serviceTypeDescription }}</ion-col>
-      <ion-col>
-        <img 
-          *ngIf="service.service_type?.serviceTypeImage" 
-          [src]="getImageUrl(service.service_type.serviceTypeImage)" 
-          alt="Service Image" 
-          style="width: 50px; height: auto; border-radius: 4px;"
-        />
-      </ion-col>      
-      <ion-col>P{{ service.price }}</ion-col>
-      <ion-col class="actions">
-        <ion-button fill="solid" color="primary" size="small" (click)="openEditModal(service)">
-          Edit
-        </ion-button>
-        <ion-button 
-          fill="solid" 
-          color="danger" 
-          size="small" 
-          (click)="confirmDelete(service.serviceRateID)">
-          Delete
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Services Grid -->
+  <div class="services-container">
+    <div class="services-grid">
+      <div *ngFor="let service of displayedServices; let i = index" 
+           class="service-card"
+           [class.animate-in]="true">
+        
+        <!-- Service Image -->
+        <div class="service-image-container">
+          <img 
+            *ngIf="service.service_type?.serviceTypeImage; else noImage" 
+            [src]="getImageUrl(service.service_type.serviceTypeImage)" 
+            alt="Service Image" 
+            class="service-image"
+            loading="lazy"
+          />
+          <ng-template #noImage>
+            <div class="no-image-placeholder">
+              <ion-icon name="car-outline"></ion-icon>
+            </div>
+          </ng-template>
+          
+          <!-- Vehicle Size Badge -->
+          <div class="vehicle-size-badge">
+            {{ service.vehicleSizeCode }}
+          </div>
+        </div>
 
-      <!-- Pagination Controls -->
-      <ion-row class="pagination-row">
-        <ion-col size="12" class="pagination-container">
-          <ion-button fill="clear" size="small" (click)="changePage(false)" [disabled]="currentPage === 1">
-            <ion-icon name="chevron-back-outline"></ion-icon>
+        <!-- Service Content -->
+        <div class="service-content">
+          <div class="service-header">
+            <h3 class="service-title">{{ service.service_type.serviceTypeName }}</h3>
+            <div class="service-price">
+              <span class="currency">₱</span>
+              <span class="amount">{{ service.price | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          
+          <p class="service-description">
+            {{ service.service_type.serviceTypeDescription }}
+          </p>
+          
+          <!-- Service Meta -->
+          <div class="service-meta">
+            <div class="meta-item">
+              <ion-icon name="resize-outline"></ion-icon>
+              <span>{{ getVehicleSizeDescription(service.vehicleSizeCode) }}</span>
+            </div>
+            <div class="meta-item">
+              <ion-icon name="pricetag-outline"></ion-icon>
+              <span>ID: {{ service.serviceRateID }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Service Actions -->
+        <div class="service-actions">
+          <ion-button 
+            fill="outline" 
+            color="primary" 
+            size="small" 
+            (click)="openEditModal(service)"
+            class="action-button">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Edit
           </ion-button>
-          <span class="pagination-text">Page {{ currentPage }} of {{ totalPages }}</span>
-          <ion-button fill="clear" size="small" (click)="changePage(true)" [disabled]="currentPage === totalPages">
-            <ion-icon name="chevron-forward-outline"></ion-icon>
+          <ion-button 
+            fill="outline" 
+            color="danger" 
+            size="small" 
+            (click)="confirmDelete(service.serviceRateID)"
+            class="action-button">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Delete
           </ion-button>
-        </ion-col>
-      </ion-row>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Services Message -->
+    <div *ngIf="displayedServices.length === 0" class="no-services">
+      <ion-icon name="car-outline" class="no-services-icon"></ion-icon>
+      <h3>No services found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+  </div>
+
+  <!-- Enhanced Pagination -->
+  <div class="pagination-container" *ngIf="totalPages > 1">
+    <div class="pagination-info">
+      <span>Showing {{ getDisplayRange() }} of {{ services.length }} services</span>
+    </div>
+    
+    <div class="pagination-controls">
+      <ion-button 
+        fill="clear" 
+        size="small" 
+        (click)="changePage(false)" 
+        [disabled]="currentPage === 1"
+        class="pagination-button">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        Previous
+      </ion-button>
+      
+      <div class="page-numbers">
+        <span 
+          *ngFor="let page of getPageNumbers()" 
+          class="page-number"
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)">
+          {{ page }}
+        </span>
+      </div>
+      
+      <ion-button 
+        fill="clear" 
+        size="small" 
+        (click)="changePage(true)" 
+        [disabled]="currentPage === totalPages"
+        class="pagination-button">
+        Next
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
 </ion-content>

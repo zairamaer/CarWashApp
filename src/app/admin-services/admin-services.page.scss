@@ -1,50 +1,287 @@
+/* Root Layout Fix */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+ion-app {
+  height: 100vh;
+}
+
+/* Split Pane Full Height */
+ion-split-pane {
+  --side-width: 280px;
+  height: 100vh;
+  display: flex;
+}
+
+/* Main Layout Structure - Fixed */
 #main-content {
   display: flex;
   flex-direction: column;
-  height: 100vh; // Full viewport height
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow: hidden;
 }
 
-ion-header {
-  flex: 0 0 auto; // Header doesn't grow
+/* Professional Header Styling */
+.admin-header {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
-ion-content {
-  flex: 1 1 auto; // Fill remaining space
+.header-toolbar {
+  --background: #ffffff;
+  --color: #2d3748;
+  --border-width: 0;
+  min-height: 70px;
+  padding: 0 1.5rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title-section {
   display: flex;
   flex-direction: column;
-  overflow: hidden; // Prevent outer scroll
+  align-items: flex-start;
 }
 
-.service-table-container {
-  flex: 1 1 auto; // Fill available space
-  overflow-y: auto; // Enable vertical scroll
-  -webkit-overflow-scrolling: touch; // Smooth scroll on mobile
+.main-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+  line-height: 1.2;
 }
 
-.pagination-container {
-  flex: 0 0 auto; // Stays at bottom
-  margin-top: 0.5rem;
+.subtitle {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 400;
+  margin-top: 2px;
 }
 
-/* Sidebar width */
-ion-split-pane {
-  --side-width: 280px; /* Default width */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 
-  @media (max-width: 1024px) {
-    --side-width: 220px;
+/* Professional Create Button */
+.create-button {
+  --background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  --background-hover: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  --background-activated: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+  --color: white;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 8px rgba(72, 187, 120, 0.25);
+  --padding-start: 1.2rem;
+  --padding-end: 1.2rem;
+  --padding-top: 0.75rem;
+  --padding-bottom: 0.75rem;
+  height: auto;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0.025em;
+  transition: all 0.2s ease-in-out;
+}
+
+.create-button:hover {
+  transform: translateY(-1px);
+  --box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+}
+
+.create-button ion-icon {
+  font-size: 1.1rem;
+}
+
+.menu-button {
+  --color: #4a5568;
+  --padding: 8px;
+}
+
+/* Main Content Styling - Fixed */
+.main-content {
+  flex: 1;
+  --background: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  height: calc(100vh - 70px); /* Subtract header height */
+  overflow-y: auto;
+}
+
+.content-wrapper {
+  min-height: 100%;
+  padding: 0; /* Remove all padding */
+  max-width: none; /* Remove max-width restriction */
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.service-list-wrapper {
+  background: transparent; /* Remove background */
+  border-radius: 0; /* Remove border radius */
+  box-shadow: none; /* Remove box shadow */
+  backdrop-filter: none; /* Remove backdrop filter */
+  border: none; /* Remove border */
+  overflow: hidden;
+  transition: none; /* Remove hover transitions */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-list-wrapper:hover {
+  box-shadow: none; /* Remove hover shadow */
+}
+
+/* Ensure app-service-list fills the wrapper completely */
+.service-list-wrapper app-service-list {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sidebar Styling */
+ion-menu {
+  --background: #1a202c;
+  height: 100vh;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .content-wrapper {
+    padding: 0; /* Remove padding */
+    height: 100%;
   }
-
-  @media (max-width: 768px) {
-    --side-width: 200px;
+  
+  ion-split-pane {
+    --side-width: 250px;
   }
 }
 
-/* Optional: show scrollbar on web browsers */
-.service-table-container::-webkit-scrollbar {
+@media (max-width: 768px) {
+  .header-toolbar {
+    padding: 0 1rem;
+    min-height: 60px;
+  }
+  
+  .main-content {
+    height: calc(100vh - 60px); /* Adjust for smaller header */
+  }
+  
+  .header-content {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  
+  .main-title {
+    font-size: 1.25rem;
+  }
+  
+  .subtitle {
+    display: none;
+  }
+  
+  .create-button {
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .content-wrapper {
+    padding: 0; /* Remove padding */
+    height: 100%;
+  }
+  
+  ion-split-pane {
+    --side-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-left {
+    gap: 0.5rem;
+  }
+  
+  .create-button span {
+    display: none;
+  }
+  
+  .create-button {
+    --padding-start: 0.8rem;
+    --padding-end: 0.8rem;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
-.service-table-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #cbd5e0, #a0aec0);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #a0aec0, #718096);
+}
+
+/* Loading States and Animations */
+.service-list-wrapper {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Professional Color Scheme */
+:root {
+  --admin-primary: #4299e1;
+  --admin-success: #48bb78;
+  --admin-warning: #ed8936;
+  --admin-danger: #f56565;
+  --admin-background: #f7fafc;
+  --admin-surface: #ffffff;
+  --admin-text-primary: #2d3748;
+  --admin-text-secondary: #718096;
+  --admin-border: #e2e8f0;
 }

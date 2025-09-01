@@ -8,21 +8,37 @@
 
   <!-- Main Content -->
   <div id="main-content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Admin Services</ion-title>
+    <!-- Professional Header -->
+    <ion-header class="admin-header">
+      <ion-toolbar class="header-toolbar">
+        <div class="header-content">
+          <div class="header-left">
+            <ion-menu-button slot="start" class="menu-button"></ion-menu-button>
+          </div>
+          
+          <div class="header-right">
+            <!-- Create Button in Header -->
+            <ion-button 
+              (click)="openServiceForm()" 
+              fill="solid"
+              color="success"
+              class="create-button">
+              <ion-icon name="add-outline" slot="start"></ion-icon>
+              Add Service
+            </ion-button>
+          </div>
+        </div>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
-
-      <!-- Create Button to Open Modal -->
-      <div class="button-container">
-        <ion-button (click)="openServiceForm()" color="success">Create</ion-button>
+    <!-- Main Content Area -->
+    <ion-content class="main-content">
+      <div class="content-wrapper">
+        <!-- Service List Component -->
+        <div class="service-list-wrapper">
+          <app-service-list></app-service-list>
+        </div>
       </div>
-
-      <!-- Service List -->
-      <app-service-list></app-service-list>
     </ion-content>
   </div>
 </ion-split-pane>

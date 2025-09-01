@@ -115,6 +115,10 @@ export class ServiceFormComponent implements OnInit {
 
 
   saveServiceWithExistingType() {
+    let completedRequests = 0;
+    let failedRequests = 0;
+    const totalRequests = this.selectedVehicleSizes.length;
+
     this.selectedVehicleSizes.forEach(size => {
       const vehicleSizeCode = this.getVehicleSize(size);
 
@@ -132,16 +136,33 @@ export class ServiceFormComponent implements OnInit {
         next: (response) => {
           console.log('Service created:', response);
           this.addedServices.push(response);
-          this.presentToast('Service created successfully ✅'); // 👈 success toast
+          completedRequests++;
+          
+          if (completedRequests + failedRequests === totalRequests) {
+            if (failedRequests === 0) {
+              this.presentToast('All services created successfully ✅');
+              this.modalCtrl.dismiss(this.addedServices);
+            } else if (completedRequests > 0) {
+              this.presentToast(`${completedRequests} service(s) created, ${failedRequests} failed ⚠️`, 'danger');
+              this.modalCtrl.dismiss(this.addedServices);
+            }
+          }
         },
         error: (error) => {
           console.error('Error creating service:', error);
-          this.presentToast('Failed to save service ❌', 'danger'); // 👈 error toast
+          failedRequests++;
+          
+          if (completedRequests + failedRequests === totalRequests) {
+            if (completedRequests === 0) {
+              this.presentToast('Failed to save all services ❌', 'danger');
+            } else {
+              this.presentToast(`${completedRequests} service(s) created, ${failedRequests} failed ⚠️`, 'danger');
+              this.modalCtrl.dismiss(this.addedServices);
+            }
+          }
         },
       });
     });
-
-    this.modalCtrl.dismiss(this.addedServices);
   }
 
 
@@ -169,4 +190,3 @@ export class ServiceFormComponent implements OnInit {
   }
 
 }
-
