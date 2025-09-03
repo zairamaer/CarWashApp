@@ -25,9 +25,9 @@
           multiple="true" 
           placeholder="Select vehicle sizes"
           class="form-select">
-          <ion-select-option *ngFor="let size of vehicleSizes" [value]="size.vehicleSizeCode">
-            {{ size.vehicleSizeCode }}
-          </ion-select-option>
+            <ion-select-option *ngFor="let size of vehicleSizes" [value]="size.vehicleSizeCode">
+              {{ size.vehicleSizeDescription }}
+            </ion-select-option>
         </ion-select>
       </ion-item>
 
