@@ -15,50 +15,81 @@
 <app-home-header *ngIf="screenSizeService.isLargeScreen$ | async"></app-home-header>
 
 <!-- Main Content -->
-<ion-content [fullscreen]="true" class="ion-padding appointment-page">
-
-      <!-- History Title -->
-    <div class="history-header">
-      <h2>History</h2>
+<ion-content [fullscreen]="true" class="appointment-page">
+  <div class="page-container">
+    <!-- Page Title Section -->
+    <div class="page-header">
+      <div class="title-section">
+        <div class="main-title">
+          <h1>Appointments</h1>
+          <p class="subtitle">Manage your car wash bookings</p>
+        </div>
+        
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+          <div class="stat-item scheduled">
+            <div class="stat-icon">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-number">{{ getStatCount('scheduled') }}</span>
+              <span class="stat-label">Scheduled</span>
+            </div>
+          </div>
+          
+          <div class="stat-item completed">
+            <div class="stat-icon">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-number">{{ getStatCount('history') }}</span>
+              <span class="stat-label">Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-  <ion-grid>
-    <ion-row>
-      <!-- Left Button Column -->
-      <ion-col size="12" sizeMd="3" class="button-menu">
-        <div class="menu-buttons">
-          <ion-button
-            [color]="selectedView === 'pending' ? 'primary' : 'medium'"
-            (click)="selectedView = 'pending'"
-          >
-            Pending
-          </ion-button>
+    <!-- Navigation Tabs -->
+    <div class="navigation-section">
+      <div class="nav-tabs">
+        <button 
+          class="nav-tab"
+          [class.active]="selectedView === 'scheduled'"
+          (click)="setActiveView('scheduled')">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>Scheduled</span>
+          <div class="tab-indicator" *ngIf="selectedView === 'scheduled'"></div>
+        </button>
 
-          <ion-button
-            [color]="selectedView === 'scheduled' ? 'primary' : 'medium'"
-            (click)="selectedView = 'scheduled'"
-          >
-            Scheduled
-          </ion-button>
+        <button 
+          class="nav-tab"
+          [class.active]="selectedView === 'history'"
+          (click)="setActiveView('history')">
+          <ion-icon name="library-outline"></ion-icon>
+          <span>History</span>
+          <div class="tab-indicator" *ngIf="selectedView === 'history'"></div>
+        </button>
+      </div>
+    </div>
 
-          <ion-button
-            [color]="selectedView === 'history' ? 'primary' : 'medium'"
-            (click)="selectedView = 'history'"
-          >
-            History
-          </ion-button>
+    <!-- Content Section -->
+    <div class="content-section">
+
+      <!-- Content Container -->
+      <div class="content-container">
+        <div class="content-wrapper" [class.fade-in]="contentLoaded">
+          <!-- Scheduled Component -->
+          <div *ngIf="selectedView === 'scheduled'" class="component-wrapper">
+            <app-schedules></app-schedules>
+          </div>
+
+          <!-- History Component -->
+          <div *ngIf="selectedView === 'history'" class="component-wrapper">
+            <app-history></app-history>
+          </div>
         </div>
-      </ion-col>
-
-      <!-- Right Content Column -->
-      <ion-col size="12" sizeMd="9">
-        <div class="content-box ion-padding">
-          <app-pending *ngIf="selectedView === 'pending'"></app-pending>
-          <app-schedules *ngIf="selectedView === 'scheduled'"></app-schedules>
-          <app-history *ngIf="selectedView === 'history'"></app-history>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  
+      </div>
+    </div>
+  </div>
 </ion-content>

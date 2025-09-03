@@ -1,88 +1,453 @@
+// Main page styling
 .appointment-page {
-    background-color: #f6f7fb;
+  background: linear-gradient(135deg, #f6f7fb 0%, #e9ecf3 100%);
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+// Page Header Section
+.page-header {
+  margin-bottom: 32px;
+  
+  .title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+    }
   }
   
-.menu-buttons {
+  .main-title {
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.02em;
+      
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+    
+    .subtitle {
+      color: #6b7280;
+      font-size: 1.1rem;
+      margin: 0;
+      font-weight: 400;
+    }
+  }
+}
+
+// Stats Overview
+.stats-overview {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 8px;
-  width: 80%;
-}
-
-/* Default button style */
-.menu-buttons ion-button {
-  height: 50px;
-  border-radius: 25px;
-  font-weight: 500;
-  font-size: 16px;
-  text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  background-color: #f0f0f0; /* default gray background */
-  color: #505050;
-}
-
-/* Hover effect for unselected buttons */
-.menu-buttons ion-button:not([color="primary"]):hover {
-  background-color: #d9d9d9;
-  color: #333;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: scale(1.03); /* slight zoom */
-}
-
-/* Active/selected button */
-.menu-buttons ion-button[color="primary"] {
-  background-color: #00aaff; /* bright blue */
-  color: #fff;
-  font-weight: bold;
-  box-shadow: 0 6px 15px rgba(0,170,255,0.4); /* subtle glow */
-  transform: scale(1.05); /* slightly larger */
-}
-
-/* Optional: smooth transition for scale and shadow */
-.menu-buttons ion-button {
-  transition: all 0.3s ease;
-}
-
-
+  gap: 20px;
   
-  .content-box {
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    min-height: 300px;
-    transition: all 0.3s ease-in-out;
+  @media (max-width: 768px) {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
   }
   
-  .history-header {
-  position: relative;
-  margin-bottom: 1.5rem;
-  text-align: center; /* center the title */
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+    
+    &.scheduled {
+      background: linear-gradient(135deg, #dbeafe 0%, #3b82f6 100%);
+      color: #1e40af;
+    }
+    
+    &.completed {
+      background: linear-gradient(135deg, #d1fae5 0%, #10b981 100%);
+      color: #065f46;
+    }
+    
+    .stat-icon {
+      ion-icon {
+        font-size: 1.5rem;
+        opacity: 0.9;
+      }
+    }
+    
+    .stat-info {
+      display: flex;
+      flex-direction: column;
+      
+      .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      
+      .stat-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        opacity: 0.8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
 }
 
-/* Main title */
-.history-header h2 {
-  font-size: 60px;
-  font-weight: 700;
-  color: black; 
-  position: relative;
-  display: inline-block;
-  padding-bottom: 2%;
-  z-index: 2;
+// Navigation Section
+.navigation-section {
+  margin-bottom: 32px;
+  
+  .nav-tabs {
+    display: flex;
+    background: white;
+    border-radius: 20px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    gap: 4px;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 24px;
+      border: none;
+      border-radius: 16px;
+      background: transparent;
+      color: #6b7280;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      
+      @media (max-width: 768px) {
+        padding: 14px 20px;
+        justify-content: flex-start;
+      }
+      
+      ion-icon {
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+      
+      span {
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      
+      &:hover:not(.active) {
+        background: #f8fafc;
+        color: #374151;
+        transform: translateY(-1px);
+      }
+      
+      &.active {
+        background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+        color: white;
+        font-weight: 600;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(var(--ion-color-primary-rgb), 0.3);
+        
+        ion-icon {
+          transform: scale(1.1);
+        }
+        
+        .tab-indicator {
+          position: absolute;
+          bottom: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 30px;
+          height: 3px;
+          background: white;
+          border-radius: 2px;
+          opacity: 0.9;
+        }
+      }
+    }
+  }
 }
 
-/* Optional gray silhouette behind the title */
-.history-header::before {
-  content: "History";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 80px;
-  font-weight: 900;
-  color: rgba(0,0,0,0.05);
-  z-index: 1; /* behind the title */
-  pointer-events: none;
-  white-space: nowrap;
+// Content Section
+.content-section {
+  .section-header {
+    margin-bottom: 24px;
+    text-align: center;
+    
+    .dynamic-title {
+      position: relative;
+      display: inline-block;
+      
+      h2 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        position: relative;
+        display: inline-block;
+        margin: 0;
+        padding-bottom: 16px;
+        z-index: 2;
+        letter-spacing: -0.02em;
+        
+        @media (max-width: 768px) {
+          font-size: 2.5rem;
+        }
+      }
+      
+      // Dynamic background text effect
+      &::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4.5rem;
+        font-weight: 900;
+        color: rgba(0, 0, 0, 0.04);
+        z-index: 1;
+        pointer-events: none;
+        white-space: nowrap;
+        letter-spacing: -0.02em;
+        
+        @media (max-width: 768px) {
+          font-size: 3.5rem;
+        }
+      }
+      
+      &[data-section="pending"]::before {
+        content: "Pending";
+        color: rgba(251, 191, 36, 0.1);
+      }
+      
+      &[data-section="scheduled"]::before {
+        content: "Scheduled";
+        color: rgba(59, 130, 246, 0.1);
+      }
+      
+      &[data-section="history"]::before {
+        content: "History";
+        color: rgba(16, 185, 129, 0.1);
+      }
+    }
+  }
+  
+  .content-container {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    min-height: 500px;
+    
+    .content-wrapper {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      height: 100%;
+      
+      &.fade-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .component-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        
+        // Remove any default padding/margins from child components
+        & > * {
+          border-radius: 0;
+          box-shadow: none;
+          margin: 0;
+          flex: 1;
+        }
+        
+        // Override child component headers if they exist
+        ion-header {
+          display: none;
+        }
+        
+        // Specific overrides for history component
+        app-history {
+          height: 100%;
+          display: block;
+          
+          ion-content {
+            --padding-start: 0;
+            --padding-end: 0;
+            --padding-top: 0;
+            --padding-bottom: 0;
+            
+            .scroll-content {
+              padding: 0 !important;
+            }
+            
+            .history-container {
+              padding: 24px;
+              background: transparent;
+              min-height: 100%;
+            }
+          }
+        }
+        
+        // Override for schedules component
+        app-schedules {
+          height: 100%;
+          display: block;
+          
+          ion-content {
+            --padding-start: 0;
+            --padding-end: 0;
+            --padding-top: 0;
+            --padding-bottom: 0;
+            
+            .scroll-content {
+              padding: 0 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Global overrides for child components within appointment page
+.appointment-page {
+  // Override any child component containers
+  .history-container,
+  .schedules-container {
+    background: transparent !important;
+    padding: 24px !important;
+  }
+  
+  // Remove any duplicate customer info sections from child components
+  .customer-info-section {
+    display: none;
+  }
+  
+  // Adjust stats sections if they appear in child components
+  .enhanced-stats-section {
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1200px) {
+  .page-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 12px;
+  }
+  
+  .stats-overview {
+    .stat-item {
+      min-width: 100px;
+      padding: 12px 16px;
+      
+      .stat-info {
+        .stat-number {
+          font-size: 1.25rem;
+        }
+        
+        .stat-label {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+  
+  .navigation-section {
+    .nav-tabs {
+      .nav-tab {
+        font-size: 0.9rem;
+        
+        ion-icon {
+          font-size: 1.1rem;
+        }
+      }
+    }
+  }
+  
+  // Adjust child component padding on mobile
+  .appointment-page {
+    .history-container,
+    .schedules-container {
+      padding: 16px !important;
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Loading animation
+.content-wrapper:not(.fade-in) {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
