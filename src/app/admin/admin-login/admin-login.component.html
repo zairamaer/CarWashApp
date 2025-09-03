@@ -1,32 +1,125 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Admin Login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <form [formGroup]="adminLoginForm" (ngSubmit)="login()" style="padding: 20px;">
-    <ion-item>
-      <ion-label position="stacked">Email</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
-    <div *ngIf="formControls['email'].invalid && formControls['email'].touched" style="color: red;">
-      <small *ngIf="formControls['email'].errors?.['required']">Email is required.</small>
-      <small *ngIf="formControls['email'].errors?.['email']">Enter a valid email.</small>
+<!-- admin-login.component.html -->
+<ion-content class="admin-login-page" [fullscreen]="true">
+  <div class="admin-login-container">
+    <!-- Left Side (Admin Branding) -->
+    <div class="admin-left">
+      <div class="brand-section">
+        <div class="logo-container">
+          <div class="logo-wrapper">
+            <ion-icon name="shield-checkmark" class="brand-icon"></ion-icon>
+          </div>
+          <h1 class="brand-title">Admin</h1>
+        </div>
+        <p class="brand-subtitle">GoWash Management Portal</p>
+      </div>
+      
+      <div class="welcome-section">
+        <div class="welcome-text">
+          <h2>Secure Admin Access</h2>
+          <p>Manage your GoWash operations, monitor services, and oversee business performance from this secure portal.</p>
+        </div>
+      </div>
     </div>
 
-    <ion-item>
-      <ion-label position="stacked">Password</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
-    </ion-item>
-    <div *ngIf="formControls['password'].invalid && formControls['password'].touched" style="color: red;">
-      <small *ngIf="formControls['password'].errors?.['required']">Password is required.</small>
-      <small *ngIf="formControls['password'].errors?.['minlength']">Password must be at least 6 characters.</small>
-    </div>
+    <!-- Right Side (Login Form) -->
+    <div class="admin-right">
+      <div class="admin-form-container">
+        <div class="form-header">
+          <div class="header-logo">
+            <ion-icon name="shield-checkmark" class="header-icon"></ion-icon>
+            <span class="header-brand">Admin Portal</span>
+          </div>
+          <h2>Administrator Login</h2>
+          <p>Access your management dashboard</p>
+        </div>
 
-    <ion-button expand="block" type="submit" [disabled]="adminLoginForm.invalid || loading">
-      <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
-      <span *ngIf="!loading">Login</span>
-    </ion-button>
-  </form>
+        <form [formGroup]="adminLoginForm" (ngSubmit)="login()" class="admin-form">
+          <!-- Email Field -->
+          <div class="input-group">
+            <ion-item 
+              class="custom-input" 
+              [class.ion-invalid]="email?.invalid && email?.touched"
+              [class.ion-valid]="email?.valid && email?.touched"
+              lines="none"
+            >
+              <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="stacked">Admin Email</ion-label>
+              <ion-input 
+                type="email" 
+                formControlName="email"
+                placeholder="Enter your admin email"
+                autocomplete="email"
+                [clearOnEdit]="false"
+              ></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="email?.invalid && email?.touched">
+              {{ getEmailErrorMessage() }}
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="input-group">
+            <ion-item 
+              class="custom-input password-input" 
+              [class.ion-invalid]="password?.invalid && password?.touched"
+              [class.ion-valid]="password?.valid && password?.touched"
+              lines="none"
+            >
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-label position="stacked">Admin Password</ion-label>
+              <ion-input 
+                [type]="showPassword ? 'text' : 'password'" 
+                formControlName="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                [clearOnEdit]="false"
+              ></ion-input>
+              <ion-button 
+                fill="clear" 
+                slot="end" 
+                (click)="togglePasswordVisibility()"
+                class="password-toggle"
+                type="button"
+              >
+                <ion-icon 
+                  [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                  class="toggle-icon"
+                ></ion-icon>
+              </ion-button>
+            </ion-item>
+            <div class="error-message" *ngIf="password?.invalid && password?.touched">
+              {{ getPasswordErrorMessage() }}
+            </div>
+          </div>
+
+          <!-- Login Button -->
+          <ion-button 
+            expand="block" 
+            type="submit"
+            class="login-btn"
+            [disabled]="adminLoginForm.invalid || loading"
+          >
+            <ion-spinner name="crescent" *ngIf="loading"></ion-spinner>
+            <span *ngIf="!loading">Sign In</span>
+            <span *ngIf="loading">Signing In...</span>
+          </ion-button>
+
+          <!-- Security Notice -->
+          <div class="security-notice">
+            <ion-icon name="information-circle-outline" class="notice-icon"></ion-icon>
+            <p class="notice-text">
+              This is a secure admin portal. All activities are monitored and logged.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Elements -->
+  <div class="bg-elements">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+  </div>
 </ion-content>
