@@ -5,7 +5,7 @@
       <ion-icon name="person"></ion-icon>
     </div>
     <div class="admin-info">
-      <h3>Admin</h3>
+      <h3>{{ adminName }}</h3>
       <p>Administrator</p>
     </div>
   </div>
@@ -13,7 +13,6 @@
   <!-- Menu Section -->
   <ion-list class="sidebar-menu">
     <ng-container *ngFor="let item of menuItems; let i = index">
-
       <ion-menu-toggle auto-hide="false">
         <ion-item 
           [routerLink]="item.route" 
@@ -33,7 +32,7 @@
 
   <!-- Footer Section -->
   <div class="sidebar-footer">
-    <ion-item button class="logout-item">
+    <ion-item button class="logout-item" (click)="onLogout()">
       <ion-icon name="log-out-outline" slot="start" class="logout-icon"></ion-icon>
       <ion-label class="logout-label">Logout</ion-label>
     </ion-item>

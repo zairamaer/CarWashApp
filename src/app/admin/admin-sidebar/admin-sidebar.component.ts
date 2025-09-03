@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { AdminService } from '../../services/admin.service';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -14,6 +16,7 @@ import { filter } from 'rxjs/operators';
 })
 export class AdminSidebarComponent implements OnInit, OnDestroy {
   private routerSubscription!: Subscription;
+  adminName: string = 'Admin';
 
   menuItems = [
     { 
@@ -54,9 +57,18 @@ export class AdminSidebarComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private adminService: AdminService,
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit() {
+    // Load admin info
+    this.loadAdminInfo();
+    
     // Set initial active state based on current route
     this.updateActiveState(this.router.url);
 
@@ -71,6 +83,13 @@ export class AdminSidebarComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
+    }
+  }
+
+  private loadAdminInfo() {
+    const admin = this.adminService.getAdmin();
+    if (admin && admin.name) {
+      this.adminName = admin.name;
     }
   }
 
@@ -91,5 +110,70 @@ export class AdminSidebarComponent implements OnInit, OnDestroy {
   onMenuItemClick(selectedItem: any) {
     // Optional: Add any additional logic you want to run on menu item click
     console.log('Navigating to:', selectedItem.route);
+  }
+
+  async onLogout() {
+    const alert = await this.alertController.create({
+      header: 'Confirm Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Logout',
+          handler: () => {
+            this.performLogout();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  private async performLogout() {
+    const loading = await this.loadingController.create({
+      message: 'Logging out...',
+      duration: 5000
+    });
+
+    await loading.present();
+
+    try {
+      await this.adminService.logout().toPromise();
+      
+      // Show success message
+      const toast = await this.toastController.create({
+        message: 'Successfully logged out',
+        duration: 2000,
+        color: 'success',
+        position: 'top'
+      });
+      await toast.present();
+      
+      // Redirect to admin login
+      this.router.navigate(['/admin-login']);
+      
+    } catch (error) {
+      console.error('Logout error:', error);
+      
+      // Even if logout fails on server, clear local data and redirect
+      this.adminService.clearAdminData();
+      
+      const toast = await this.toastController.create({
+        message: 'Logged out (connection error)',
+        duration: 2000,
+        color: 'warning',
+        position: 'top'
+      });
+      await toast.present();
+      
+      this.router.navigate(['/admin-login']);
+    } finally {
+      await loading.dismiss();
+    }
   }
 }
