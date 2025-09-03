@@ -1,19 +1,180 @@
-<ion-content class="ion-padding">
-  <ion-grid>
-    <ion-row class="header">
-      <ion-col>Name</ion-col>
-      <ion-col>Email</ion-col>
-      <ion-col>Phone</ion-col>
-      <ion-col>Total Appointments</ion-col>
-      <ion-col>Last Appointment</ion-col>
-    </ion-row>
+<!-- Search and Filters Header (Fixed) -->
+<ion-header class="search-header">
+  <ion-card class="search-card">
+    <ion-card-content class="search-content">
+      <div class="search-row">
+        <ion-searchbar
+          [(ngModel)]="searchTerm"
+          (ionInput)="onSearchChange($event)"
+          placeholder="Search customers..."
+          show-clear-button="focus"
+          class="search-bar">
+        </ion-searchbar>
+        
+        <div class="action-buttons">
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            (click)="presentSortOptions()">
+            <ion-icon name="funnel-outline" slot="start"></ion-icon>
+            Sort
+          </ion-button>
+          
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            (click)="toggleViewMode()">
+            <ion-icon 
+              [name]="viewMode === 'list' ? 'grid-outline' : 'list-outline'" 
+              slot="start">
+            </ion-icon>
+            {{ viewMode === 'list' ? 'Grid' : 'List' }}
+          </ion-button>
+        </div>
+      </div>
+      
+      <div class="stats-row" *ngIf="!isLoading">
+        <ion-text color="medium">
+          <small>{{ filteredCustomers.length }} of {{ totalItems }} customers</small>
+        </ion-text>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-header>
 
-    <ion-row *ngFor="let customer of customers" class="data-row">
-      <ion-col>{{ customer.name }}</ion-col>
-      <ion-col>{{ customer.email }}</ion-col>
-      <ion-col>{{ customer.phone }}</ion-col>
-      <ion-col>{{ customer.totalAppointments }}</ion-col>
-      <ion-col>{{ customer.lastAppointment | date: 'mediumDate' }}</ion-col>
-    </ion-row>
-  </ion-grid>
+<!-- Scrollable Content Container -->
+<ion-content class="customers-content" [scrollEvents]="true">
+  
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pulling-icon="chevron-down-circle-outline"
+      pulling-text="Pull to refresh"
+      refreshing-spinner="circles"
+      refreshing-text="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading && filteredCustomers.length === 0">
+    <ion-spinner name="circles"></ion-spinner>
+    <ion-text color="medium">
+      <p>Loading customers...</p>
+    </ion-text>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && filteredCustomers.length === 0 && !searchTerm">
+    <ion-icon name="people-outline" class="empty-icon"></ion-icon>
+    <h3>No Customers Found</h3>
+    <p>Get started by adding your first customer.</p>
+    <ion-button expand="block" fill="outline">
+      <ion-icon name="add" slot="start"></ion-icon>
+      Add Customer
+    </ion-button>
+  </div>
+
+  <!-- No Search Results -->
+  <div class="empty-state" *ngIf="!isLoading && filteredCustomers.length === 0 && searchTerm">
+    <ion-icon name="search-outline" class="empty-icon"></ion-icon>
+    <h3>No Results Found</h3>
+    <p>Try adjusting your search terms.</p>
+  </div>
+
+  <!-- Customers List View -->
+  <div class="customers-container" *ngIf="filteredCustomers.length > 0">
+    
+    <!-- List View -->
+    <div class="list-view" *ngIf="viewMode === 'list'">
+      <ion-card class="customer-card" *ngFor="let customer of filteredCustomers; trackBy: trackByCustomerId">
+        <ion-item lines="none" class="customer-item">
+          <div class="avatar-container" slot="start">
+            <ion-avatar class="customer-avatar">
+              <img *ngIf="customer.avatar" [src]="customer.avatar" [alt]="customer.name">
+              <div *ngIf="!customer.avatar" class="avatar-text">
+                {{ getAvatarText(customer.name) }}
+              </div>
+            </ion-avatar>
+            <ion-badge 
+              [color]="getStatusColor(customer.status)" 
+              class="status-badge">
+              {{ customer.status || 'active' }}
+            </ion-badge>
+          </div>
+          
+          <ion-label class="customer-info">
+            <h2 class="customer-name">{{ customer.name }}</h2>
+            <p class="customer-email">
+              <ion-icon name="mail-outline"></ion-icon>
+              {{ customer.email }}
+            </p>
+            <p class="customer-phone">
+              <ion-icon name="call-outline"></ion-icon>
+              {{ customer.phone }}
+            </p>
+            <p class="appointment-count" *ngIf="customer.appointments?.length">
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{ customer.appointments.length }} appointments
+            </p>
+          </ion-label>
+          
+          <div slot="end" class="actions-container">
+            <ion-button fill="clear" size="small" color="primary">
+              <ion-icon name="ellipsis-vertical"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+      </ion-card>
+    </div>
+
+    <!-- Grid View -->
+    <div class="grid-view" *ngIf="viewMode === 'grid'">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6" size-lg="4" *ngFor="let customer of filteredCustomers; trackBy: trackByCustomerId">
+            <ion-card class="customer-grid-card">
+              <ion-card-content>
+                <div class="grid-card-header">
+                  <ion-avatar class="grid-avatar">
+                    <img *ngIf="customer.avatar" [src]="customer.avatar" [alt]="customer.name">
+                    <div *ngIf="!customer.avatar" class="avatar-text">
+                      {{ getAvatarText(customer.name) }}
+                    </div>
+                  </ion-avatar>
+                  <ion-badge 
+                    [color]="getStatusColor(customer.status)" 
+                    class="grid-status-badge">
+                    {{ customer.status || 'active' }}
+                  </ion-badge>
+                </div>
+                
+                <h3 class="grid-customer-name">{{ customer.name }}</h3>
+                <p class="grid-customer-email">{{ customer.email }}</p>
+                <p class="grid-customer-phone">{{ customer.phone }}</p>
+                
+                <div class="grid-footer" *ngIf="customer.appointments?.length">
+                  <ion-chip color="primary" outline="true">
+                    <ion-icon name="calendar-outline"></ion-icon>
+                    <ion-label>{{ customer.appointments.length }} appointments</ion-label>
+                  </ion-chip>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+  <!-- Infinite Scroll -->
+  <ion-infinite-scroll 
+    threshold="100px" 
+    (ionInfinite)="loadMore($event)"
+    [disabled]="currentPage >= totalPages">
+    <ion-infinite-scroll-content
+      loading-spinner="bubbles"
+      loading-text="Loading more customers...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
 </ion-content>
