@@ -1,13 +1,87 @@
 ion-split-pane {
-    --side-width: 280px; /* Default width */
-  
-    @media (max-width: 768px) {
-      --side-width: 200px; /* Smaller width on small screens */
-    }
-  }
+  --side-width: 280px; /* Default width */
 
-  ion-content {
-    --overflow: hidden;
+  @media (max-width: 768px) {
+    --side-width: 200px; /* Smaller width on small screens */
+  }
 }
 
+ion-content {
+  --overflow: hidden;
+  height: 100%;
+}
+
+// Make the schedule list component take full height
+app-schedule-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+// Additional styles for the schedule list content
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.schedule-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   
+  .page-header {
+    flex-shrink: 0; // Prevent header from shrinking
+    padding: 16px 16px 0;
+  }
+  
+  .filters-section {
+    flex-shrink: 0; // Prevent filters from shrinking
+    padding: 0 16px 16px;
+  }
+  
+  .loading-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .schedules-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 16px;
+    
+    .schedules-grid {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .no-schedules {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      
+      .no-schedules-icon {
+        font-size: 4rem;
+        color: var(--ion-color-medium);
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  
+  .pagination-container {
+    flex-shrink: 0; // Keep pagination at bottom
+    padding: 16px;
+    border-top: 1px solid var(--ion-color-light-shade);
+    background: var(--ion-color-step-50);
+  }
+}

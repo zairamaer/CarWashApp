@@ -1,31 +1,282 @@
-<ion-content class="ion-padding">
-  <ion-grid>
-    <ion-row class="header">
-      <ion-col>Customer Name</ion-col>
-      <ion-col>Service</ion-col>
-      <ion-col>Vehicle</ion-col>
-      <ion-col>Date</ion-col>
-      <ion-col>Time</ion-col>
-      <ion-col>Status</ion-col>
-      <ion-col>Action</ion-col>
-    </ion-row>
+<!-- Customer Schedule List Template -->
 
-    <ion-row *ngFor="let schedule of upcomingSchedules" class="data-row">
-      <ion-col>{{ schedule.name }}</ion-col>
-      <ion-col>{{ schedule.service }}</ion-col>
-      <ion-col>{{ schedule.vehicle }}</ion-col>
-      <ion-col>{{ schedule.date | date: 'fullDate' }}</ion-col>
-      <ion-col>{{ schedule.time }}</ion-col>
-      <ion-col>
-        <ion-badge [color]="schedule.status === 'Upcoming' ? 'primary' : 'medium'">
-          {{ schedule.status }}
-        </ion-badge>
-      </ion-col>
-      <ion-col>
-        <ion-button fill="clear" color="primary" size="small">
-          <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+  <!-- Customer List View -->
+  <div *ngIf="!selectedCustomer" class="customers-container">
+    <div class="page-header">
+      <div class="header-content">
+        <h2>Customer Appointments</h2>
+        <p class="subtitle">Select a customer to view their appointments</p>
+      </div>
+      <div class="header-stats">
+        <div class="stat-card">
+          <div class="stat-number">{{ customerGroups.length }}</div>
+          <div class="stat-label">Total Customers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{{ appointments.length }}</div>
+          <div class="stat-label">Total Appointments</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <ion-searchbar 
+        class="custom-searchbar"
+        placeholder="Search customers by name, email, or phone..." 
+        [(ngModel)]="searchTerm"
+        (ionInput)="onSearchInput($event)">
+      </ion-searchbar>
+      
+      <div class="filter-controls">
+        <ion-select 
+          [(ngModel)]="sortBy"
+          (ionChange)="onSortChange($event)"
+          placeholder="Sort by"
+          class="filter-select">
+          <ion-select-option value="nextAppointment">Next Appointment</ion-select-option>
+          <ion-select-option value="name">Customer Name</ion-select-option>
+          <ion-select-option value="totalAppointments">Total Appointments</ion-select-option>
+          <ion-select-option value="upcomingCount">Upcoming Count</ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Loading customer appointments...</p>
+    </div>
+
+    <!-- Customers Container -->
+    <div *ngIf="!loading" class="schedules-container">
+      <div class="customers-grid">
+        <div *ngFor="let customerGroup of getDisplayedCustomers(); trackBy: trackByCustomerEmail" 
+             class="customer-card animate-in" 
+             (click)="selectCustomer(customerGroup)">
+          <div class="customer-avatar">
+            {{ getInitials(customerGroup.customer.name) }}
+          </div>
+          <div class="customer-info">
+            <h3>{{ customerGroup.customer.name }}</h3>
+            <p class="customer-email">{{ customerGroup.customer.email }}</p>
+            <p class="customer-phone" *ngIf="customerGroup.customer.phone">
+              <ion-icon name="call-outline"></ion-icon>
+              {{ customerGroup.customer.phone }}
+            </p>
+            
+            <div class="appointment-stats">
+              <div class="stat-item">
+                <ion-badge color="primary">
+                  {{ customerGroup.totalAppointments }} total
+                </ion-badge>
+              </div>
+              <div class="stat-item" *ngIf="customerGroup.upcomingCount > 0">
+                <ion-badge color="success">
+                  {{ customerGroup.upcomingCount }} upcoming
+                </ion-badge>
+              </div>
+            </div>
+            
+            <div class="next-appointment" *ngIf="customerGroup.nextAppointmentDate">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ getNextAppointmentText(customerGroup) }}</span>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+        </div>
+      </div>
+
+      <!-- No Customers Found -->
+      <div *ngIf="getDisplayedCustomers().length === 0" class="no-schedules">
+        <ion-icon name="people-outline" class="no-schedules-icon"></ion-icon>
+        <h3>No customers found</h3>
+        <p>Try adjusting your search criteria</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container" *ngIf="totalPages > 1">
+        <div class="pagination-info">
+          Showing {{ getDisplayRange() }} of {{ filteredCustomers.length }} customers
+        </div>
+        
+        <div class="pagination-controls">
+          <ion-button 
+            class="pagination-button"
+            fill="clear" 
+            [disabled]="currentPage === 1"
+            (click)="changePage(false)">
+            <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+            Previous
+          </ion-button>
+          
+          <div class="page-numbers">
+            <div *ngFor="let page of getPageNumbers()" 
+                 class="page-number"
+                 [class.active]="page === currentPage"
+                 (click)="goToPage(page)">
+              {{ page }}
+            </div>
+          </div>
+          
+          <ion-button 
+            class="pagination-button"
+            fill="clear" 
+            [disabled]="currentPage === totalPages"
+            (click)="changePage(true)">
+            Next
+            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Appointments Detail View -->
+  <div *ngIf="selectedCustomer" class="appointments-detail">
+    <div class="detail-header">
+      <ion-button fill="clear" (click)="goBack()" class="back-button">
+        <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+        Back to Customers
+      </ion-button>
+      
+      <div class="customer-detail-info">
+        <div class="customer-avatar large">
+          {{ getInitials(selectedCustomer.customer.name) }}
+        </div>
+        <div class="customer-details">
+          <h2>{{ selectedCustomer.customer.name }}</h2>
+          <p class="customer-email">{{ selectedCustomer.customer.email }}</p>
+          <p class="customer-phone" *ngIf="selectedCustomer.customer.phone">
+            <ion-icon name="call-outline"></ion-icon>
+            {{ selectedCustomer.customer.phone }}
+          </p>
+          
+          <div class="customer-stats">
+            <ion-badge color="primary">
+              {{ selectedCustomer.totalAppointments }} appointments
+            </ion-badge>
+            <ion-badge color="success" *ngIf="selectedCustomer.upcomingCount > 0">
+              {{ selectedCustomer.upcomingCount }} upcoming
+            </ion-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="appointments-list">
+      <!-- Appointment Filters -->
+      <div class="appointment-filters">
+        <ion-segment 
+          [(ngModel)]="appointmentFilter" 
+          (ionChange)="onAppointmentFilterChange($event)"
+          class="filter-segment">
+          <ion-segment-button value="all">
+            <ion-label>All</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="today">
+            <ion-label>Today</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="week">
+            <ion-label>This Week</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="month">
+            <ion-label>This Month</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        
+        <ion-select 
+          [(ngModel)]="appointmentStatusFilter"
+          (ionChange)="onAppointmentFilterChange($event)"
+          placeholder="Filter by Status"
+          class="status-filter">
+          <ion-select-option value="all">All Status</ion-select-option>
+          <ion-select-option value="confirmed">Confirmed</ion-select-option>
+          <ion-select-option value="completed">Completed</ion-select-option>
+        </ion-select>
+      </div>
+      
+      <!-- Filter Results Info -->
+      <div class="filter-results" *ngIf="selectedCustomer && getFilteredAppointments().length !== selectedCustomer.appointments.length">
+        <p>Showing {{ getFilteredAppointments().length }} of {{ selectedCustomer.appointments.length }} appointments</p>
+      </div>
+      
+      <h3 class="appointments-title">Appointments History</h3>
+      
+      <div *ngFor="let appointment of getFilteredAppointments()" 
+           class="appointment-card">
+        <div class="appointment-header">
+            <div class="service-info">
+              <h4>{{ appointment.service_type.serviceTypeName }}</h4>
+              <p class="vehicle-size">
+                {{ appointment.vehicle_size?.vehicleSizeDescription || appointment.service_rate.vehicleSize }}
+              </p>
+            </div>
+          <div class="appointment-status">
+            <ion-badge [color]="getStatusColor(appointment.status)">
+              {{ appointment.status }}
+            </ion-badge>
+          </div>
+        </div>
+        
+        <div class="appointment-details">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">Date & Time</div>
+              <div class="detail-value">{{ appointment.appointmentDateTime | date:'medium' }}</div>
+            </div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-icon">
+              <ion-icon name="cash-outline"></ion-icon>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">Price</div>
+              <div class="detail-value">{{ appointment.service_rate.price | currency:'PHP' }}</div>
+            </div>
+          </div>
+          
+          <div class="detail-item" *ngIf="appointment.notes">
+            <div class="detail-icon">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </div>
+            <div class="detail-content">
+              <div class="detail-label">Notes</div>
+              <div class="detail-value">{{ appointment.notes }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card-actions" *ngIf="appointment.status.toLowerCase() === 'confirmed'">
+          <ion-button 
+            class="action-button"
+            size="small" 
+            fill="outline" 
+            color="success"
+            (click)="updateStatus(appointment, 'Completed')">
+            <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+            Mark Complete
+          </ion-button>
+        </div>
+      </div>
+      
+      <div *ngIf="getFilteredAppointments().length === 0" 
+           class="no-appointments">
+        <ion-icon name="calendar-outline" size="large"></ion-icon>
+        <p *ngIf="appointmentFilter === 'all' && appointmentStatusFilter === 'all'">No appointments found for this customer</p>
+        <p *ngIf="appointmentFilter !== 'all' || appointmentStatusFilter !== 'all'">No appointments found matching the selected filters</p>
+        <ion-button 
+          *ngIf="appointmentFilter !== 'all' || appointmentStatusFilter !== 'all'"
+          fill="clear" 
+          size="small"
+          (click)="clearAppointmentFilters()">
+          Clear Filters
         </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+      </div>
+    </div>
+  </div>
