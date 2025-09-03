@@ -3,16 +3,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceService {
-  private apiUrl = 'https://api.gowashapp.online/api/service-rates'; // Replace with your actual API URL
-  private vehicleSizeUrl = 'https://api.gowashapp.online/api/vehicle-sizes';
-  private serviceTypesUrl = 'https://api.gowashapp.online/api/service-types'; 
+  private apiUrl = `${environment.apiUrl}/service-rates`;
+  private vehicleSizeUrl = `${environment.apiUrl}/vehicle-sizes`;
+  private serviceTypesUrl = `${environment.apiUrl}/service-types`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Debug log
+    console.log('🔧 Service URLs:', {
+      apiUrl: this.apiUrl,
+      vehicleSizeUrl: this.vehicleSizeUrl,
+      serviceTypesUrl: this.serviceTypesUrl
+    });
+  }
   
   // Get all services
   getServices(): Observable<any[]> {

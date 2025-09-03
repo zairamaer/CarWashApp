@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, forkJoin, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 export interface DashboardStats {
   todaysBookings: number;
