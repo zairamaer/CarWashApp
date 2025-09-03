@@ -5,18 +5,19 @@ import { LandingComponent } from './customer/landing/landing.component';
 import { HomePage } from './customer/home/home.page';
 import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import { AdminServicesPage } from './admin-services/admin-services.page'; // Import Admin Services Component
-import { AdminAuthGuard } from './auth/admin-auth.guard'; // Import Admin Auth Guard
+import { AdminServicesPage } from './admin-services/admin-services.page';
+import { AdminAuthGuard } from './auth/admin-auth.guard';
+import { AuthGuard } from './auth/auth.guard'; // Import the AuthGuard
 import { AdminAppointmentsPage } from './admin/admin-appointments/admin-appointments.page';
-import {ServicesPage} from './customer/services/services.page';
+import { ServicesPage } from './customer/services/services.page';
 import { BookingPage } from './customer/booking/booking.page';
 import { AppointmentPage } from './customer/appointment/appointment.page';
 import { SchedulesPage } from './admin/schedules/schedules.page';
 import { BookingHistoryPage } from './admin/booking-history/booking-history.page';
 import { AdminCustomersPage } from './admin/admin-customers/admin-customers.page';
 
-
 export const routes: Routes = [
+  // Public Routes - No authentication required
   {
     path: '',
     component: LandingComponent,
@@ -30,51 +31,62 @@ export const routes: Routes = [
     component: RegisterComponent,
   },
   {
+    path: 'admin-login',
+    component: AdminLoginComponent,
+  },
+  
+  // Protected Customer Routes - Require user authentication
+  {
     path: 'home',
     component: HomePage,
+    canActivate: [AuthGuard], // Protected route
   },
   {
     path: 'services',
     component: ServicesPage,
-  },
-  {
-    path: 'admin-customers',
-    component: AdminCustomersPage,
-  },
-  {
-    path: 'booking-history',
-    component: BookingHistoryPage,
-  },
-  {
-    path: 'schedules',
-    component: SchedulesPage,
+    canActivate: [AuthGuard], // Protected route
   },
   {
     path: 'booking',
     component: BookingPage,
+    canActivate: [AuthGuard], // Protected route
   },
   {
     path: 'appointment',
     component: AppointmentPage,
+    canActivate: [AuthGuard], // Protected route
   },
+  
+  // Protected Admin Routes - All require admin authentication
   {
-    path: 'admin-login',
-    component: AdminLoginComponent,
-  },
-  {
-    path: 'admin-dashboard', // Route for admin dashboard
+    path: 'admin-dashboard',
     component: AdminDashboardComponent,
-    //canActivate: [AdminAuthGuard], // Protect this route with the Admin Auth Guard
+    canActivate: [AdminAuthGuard], // Protected route
   },
   {
-    path: 'admin-services', // Route for admin services
+    path: 'admin-services',
     component: AdminServicesPage,
-    //canActivate: [AdminAuthGuard], // Protect this route with the Admin Auth Guard
+    canActivate: [AdminAuthGuard], // Protected route
   },
   {
-    path: 'admin-appointments', // Route for admin services
+    path: 'admin-appointments',
     component: AdminAppointmentsPage,
-    //canActivate: [AdminAuthGuard], // Protect this route with the Admin Auth Guard
+    canActivate: [AdminAuthGuard], // Protected route
+  },
+  {
+    path: 'admin-customers',
+    component: AdminCustomersPage,
+    canActivate: [AdminAuthGuard], // Protected route
+  },
+  {
+    path: 'booking-history',
+    component: BookingHistoryPage,
+    canActivate: [AdminAuthGuard], // Protected route
+  },
+  {
+    path: 'schedules',
+    component: SchedulesPage,
+    canActivate: [AdminAuthGuard], // Protected route
   },
   {
     path: '**',
