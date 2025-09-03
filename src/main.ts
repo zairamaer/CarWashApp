@@ -29,6 +29,8 @@ import {
   eyeOutline, 
   close,
   person,
+  callOutline,
+  checkmarkOutline,
   
   // New icons for service forms and lists
   addOutline,
@@ -69,7 +71,31 @@ import {
 
   // ✅ Needed for your template
   car,
-  build
+  build,
+
+  // ✅ Missing icons for dashboard template
+  analyticsOutline,
+  trendingUpOutline,
+  removeOutline,
+  personAddOutline,
+  sunnyOutline,
+  cardOutline,
+  calendarClearOutline,
+  personOutline,
+  libraryOutline,
+  addCircleOutline,
+  chevronDownCircleOutline,
+  checkmarkCircle,
+  star,
+  logInOutline,
+  checkmarkDone,
+  card,
+  mailOutline,
+  lockClosedOutline,
+  eyeOffOutline,
+  carSport,
+  shieldCheckmark,
+  settings
 } from 'ionicons/icons';
 
 addIcons({
@@ -130,10 +156,37 @@ addIcons({
   'bicycle-outline': bicycleOutline,
   'water-outline': waterOutline,
   'sparkles-outline': sparklesOutline,
+  'call-outline': callOutline,
+  'checkmark-outline': checkmarkOutline,
+
 
   // ✅ Added icons
   'car': car,
-  'build': build
+  'build': build,
+
+  // ✅ Added missing dashboard icons
+  'analytics-outline': analyticsOutline,
+  'trending-up-outline': trendingUpOutline,
+  'remove-outline': removeOutline,
+  'person-add-outline': personAddOutline,
+  'sunny-outline': sunnyOutline,
+  'card-outline': cardOutline,
+  'calendar-clear-outline': calendarClearOutline,
+  'person-outline': personOutline,
+  'library-outline': libraryOutline,
+  'add-circle-outline': addCircleOutline,
+  'chevron-down-circle-outline': chevronDownCircleOutline,
+  'checkmark-circle': checkmarkCircle,
+  'star': star,
+  'log-in-outline': logInOutline,
+  'checkmark-done': checkmarkDone,
+  'card': card,
+  'mail-outline': mailOutline,
+  'lock-closed-outline': lockClosedOutline,
+  'eye-off-outline': eyeOffOutline,
+  'car-sport': carSport,
+  'shield-checkmark': shieldCheckmark,
+  'settings': settings
 });
 
 bootstrapApplication(AppComponent, {
