@@ -1,6 +1,6 @@
 <ion-split-pane contentId="main-content">
   <!-- Sidebar Component -->
-  <ion-menu contentId="main-content" type="overlay">
+  <ion-menu contentId="main-content" type="overlay" class="modern-sidebar">
     <ion-content>
       <app-admin-sidebar></app-admin-sidebar>
     </ion-content>
@@ -8,36 +8,309 @@
 
   <!-- Main Content -->
   <div id="main-content">
-    <ion-header>
+    <ion-header class="modern-header">
       <ion-toolbar>
-        <ion-title>Admin Dashboard</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title class="header-title">
+          <div class="title-content">
+            <h1>Admin Dashboard</h1>
+            <p class="subtitle">Car Wash Management System</p>
+          </div>
+        </ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="logout()">Logout</ion-button>
+          <ion-button fill="clear" (click)="refreshData()" [disabled]="isLoading">
+            <ion-icon name="refresh-outline"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="4">
-            <ion-card>
-              <ion-card-content>
-                <h2><a routerLink="/admin-users">Users</a></h2>
-                <p>1000</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-          <ion-col size="4">
-            <ion-card>
-              <ion-card-content>
-                <h2><a routerLink="/admin-services">Services</a></h2>
-                <p>100</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <ion-content class="dashboard-content">
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Loading dashboard data...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="hasError && !isLoading" class="error-container">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <h3>Error Loading Data</h3>
+        <p>{{ errorMessage }}</p>
+        <ion-button fill="outline" (click)="refreshData()">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Try Again
+        </ion-button>
+      </div>
+
+      <!-- Main Dashboard Content -->
+      <div *ngIf="!isLoading && !hasError">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+          <div class="welcome-content">
+            <h2>Welcome back, Admin!</h2>
+            <p>Here's what's happening with your car wash business today.</p>
+          </div>
+          <div class="date-info">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>{{ getCurrentDate() }}</span>
+          </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-section">
+          <h3 class="section-title">Business Overview</h3>
+          <div class="stats-grid">
+            <!-- Today's Bookings -->
+            <div class="stat-card primary-card">
+              <div class="stat-icon">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </div>
+              <div class="stat-content">
+                <h4>Today's Bookings</h4>
+                <div class="stat-number">
+                  <ion-skeleton-text *ngIf="isLoadingStats" style="width: 60px; height: 40px;"></ion-skeleton-text>
+                  <span *ngIf="!isLoadingStats">{{ todaysBookings }}</span>
+                </div>
+                <div class="stat-change" [class]="getGrowthClass(bookingGrowth)">
+                  <ion-icon [name]="getGrowthIcon(bookingGrowth)"></ion-icon>
+                  {{ getGrowthText(bookingGrowth, 'bookings') }}
+                </div>
+              </div>
+              <div class="stat-action">
+                <ion-button fill="clear" routerLink="/admin-appointments">
+                  View Details
+                  <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+
+            <!-- Revenue -->
+            <div class="stat-card success-card">
+              <div class="stat-icon">
+                <ion-icon name="cash-outline"></ion-icon>
+              </div>
+              <div class="stat-content">
+                <h4>Today's Revenue</h4>
+                <div class="stat-number">
+                  <ion-skeleton-text *ngIf="isLoadingStats" style="width: 80px; height: 40px;"></ion-skeleton-text>
+                  <span *ngIf="!isLoadingStats">₱{{ todaysRevenue | number:'1.2-2' }}</span>
+                </div>
+                <div class="stat-change" [class]="getGrowthClass(revenueGrowth)">
+                  <ion-icon [name]="getGrowthIcon(revenueGrowth)"></ion-icon>
+                  {{ getGrowthText(revenueGrowth, 'revenue') }}
+                </div>
+              </div>
+              <div class="stat-action">
+                <ion-button fill="clear" routerLink="/admin-analytics">
+                  View Analytics
+                  <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+
+            <!-- Total Customers -->
+            <div class="stat-card info-card">
+              <div class="stat-icon">
+                <ion-icon name="people-outline"></ion-icon>
+              </div>
+              <div class="stat-content">
+                <h4>Total Customers</h4>
+                <div class="stat-number">
+                  <ion-skeleton-text *ngIf="isLoadingStats" style="width: 60px; height: 40px;"></ion-skeleton-text>
+                  <span *ngIf="!isLoadingStats">{{ totalCustomers }}</span>
+                </div>
+                <!-- ✅ Show exact number of new customers this week -->
+                <div class="stat-change" [class]="getGrowthClass(newCustomersThisWeek)">
+                  <ion-icon name="arrow-up-outline" *ngIf="newCustomersThisWeek > 0"></ion-icon>
+                  <ion-icon name="remove-outline" *ngIf="newCustomersThisWeek === 0"></ion-icon>
+                  <ion-icon name="arrow-down-outline" *ngIf="newCustomersThisWeek < 0"></ion-icon>
+                  {{ newCustomersThisWeek > 0 ? '+' + newCustomersThisWeek : newCustomersThisWeek }} new customers this week
+                </div>
+              </div>
+              <div class="stat-action">
+                <ion-button fill="clear" routerLink="/admin-customers">
+                  Manage Customers
+                  <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+
+            <!-- Services -->
+            <div class="stat-card warning-card">
+              <div class="stat-icon">
+                <ion-icon name="car-outline"></ion-icon>
+              </div>
+              <div class="stat-content">
+                <h4>Active Services</h4>
+                <div class="stat-number">
+                  <ion-skeleton-text *ngIf="isLoadingStats" style="width: 40px; height: 40px;"></ion-skeleton-text>
+                  <span *ngIf="!isLoadingStats">{{ totalServices }}</span>
+                </div>
+                <div class="stat-change neutral">
+                  <ion-icon name="remove-outline"></ion-icon>
+                  No changes
+                </div>
+              </div>
+              <div class="stat-action">
+                <ion-button fill="clear" routerLink="/admin-services">
+                  Manage Services
+                  <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions-section">
+          <h3 class="section-title">Quick Actions</h3>
+          <div class="actions-grid">
+            <div class="action-card" routerLink="/admin-appointments">
+              <div class="action-icon">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </div>
+              <h4>View Appointments</h4>
+              <p>Manage today's bookings and schedules</p>
+              <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+            </div>
+
+            <div class="action-card" routerLink="/admin-customers">
+              <div class="action-icon">
+                <ion-icon name="people-outline"></ion-icon>
+              </div>
+              <h4>Customer Management</h4>
+              <p>View and manage customer profiles</p>
+              <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+            </div>
+
+            <div class="action-card" routerLink="/admin-services">
+              <div class="action-icon">
+                <ion-icon name="car-outline"></ion-icon>
+              </div>
+              <h4>Service Management</h4>
+              <p>Add, edit, or remove services</p>
+              <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+            </div>
+
+            <div class="action-card" routerLink="/admin-analytics">
+              <div class="action-icon">
+                <ion-icon name="analytics-outline"></ion-icon>
+              </div>
+              <h4>Business Analytics</h4>
+              <p>View reports and insights</p>
+              <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Schedules -->
+        <div class="schedules-section">
+          <div class="section-header">
+            <h3 class="section-title">Upcoming Schedules</h3>
+            <ion-button fill="outline" routerLink="/admin-appointments">
+              View All
+              <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+            </ion-button>
+          </div>
+          
+          <div class="schedules-container">
+            <!-- Loading skeleton for appointments -->
+            <div *ngIf="isLoadingAppointments" class="schedule-skeleton">
+              <div *ngFor="let i of [1,2,3]" class="schedule-card">
+                <div class="schedule-time">
+                  <ion-skeleton-text style="width: 60px; height: 20px;"></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 40px; height: 16px;"></ion-skeleton-text>
+                </div>
+                <div class="schedule-details">
+                  <ion-skeleton-text style="width: 120px; height: 20px;"></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 100px; height: 16px;"></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 80px; height: 16px;"></ion-skeleton-text>
+                </div>
+                <div class="schedule-status">
+                  <ion-skeleton-text style="width: 60px; height: 24px;"></ion-skeleton-text>
+                </div>
+                <div class="schedule-price">
+                  <ion-skeleton-text style="width: 50px; height: 20px;"></ion-skeleton-text>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actual appointments -->
+            <div *ngIf="!isLoadingAppointments && upcomingAppointments.length > 0">
+              <div *ngFor="let appointment of upcomingAppointments" class="schedule-card">
+                <div class="schedule-time">
+                  <div class="time">{{ appointment.time }}</div>
+                  <div class="date">{{ appointment.date }}</div>
+                </div>
+                <div class="schedule-details">
+                  <h4>{{ appointment.customerName }}</h4>
+                  <p class="service">{{ appointment.serviceName }}</p>
+                  <p class="vehicle">{{ appointment.vehicleType }}</p>
+                </div>
+                <div class="schedule-status">
+                  <ion-badge [color]="getStatusColor(appointment.status)">
+                    {{ appointment.status }}
+                  </ion-badge>
+                </div>
+                <div class="schedule-price">
+                  ₱{{ appointment.price | number:'1.2-2' }}
+                </div>
+              </div>
+            </div>
+            
+            <!-- No appointments state -->
+            <div *ngIf="!isLoadingAppointments && upcomingAppointments.length === 0" class="no-schedules">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <p>No upcoming appointments</p>
+              <ion-button fill="outline" routerLink="/admin-appointments">
+                <ion-icon name="add-outline" slot="start"></ion-icon>
+                Add New Appointment
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+          <h3 class="section-title">Recent Activity</h3>
+          <div class="activity-feed">
+            <!-- Loading skeleton for activities -->
+            <div *ngIf="isLoading" class="activity-skeleton">
+              <div *ngFor="let i of [1,2,3,4]" class="activity-item">
+                <div class="activity-icon">
+                  <ion-skeleton-text style="width: 24px; height: 24px;"></ion-skeleton-text>
+                </div>
+                <div class="activity-content">
+                  <ion-skeleton-text style="width: 80%; height: 16px;"></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 40%; height: 14px;"></ion-skeleton-text>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actual activities -->
+            <div *ngIf="!isLoading && recentActivities.length > 0">
+              <div *ngFor="let activity of recentActivities" class="activity-item">
+                <div class="activity-icon" [class]="activity.type">
+                  <ion-icon [name]="getActivityIcon(activity.type)"></ion-icon>
+                </div>
+                <div class="activity-content">
+                  <p class="activity-text">{{ activity.message }}</p>
+                  <span class="activity-time">{{ activity.time }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- No activities state -->
+            <div *ngIf="!isLoading && recentActivities.length === 0" class="no-activities">
+              <ion-icon name="time-outline"></ion-icon>
+              <p>No recent activity</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </ion-content>
   </div>
 </ion-split-pane>
