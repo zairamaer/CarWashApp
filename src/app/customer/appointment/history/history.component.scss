@@ -1,21 +1,633 @@
-.history-table {
-    padding: 16px;
-    width: 100%;
-    font-size: 0.95rem;
+// Container and Layout
+.history-container {
+  padding: 0;
+  background: transparent;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+// Enhanced Stats Section
+.enhanced-stats-section {
+  margin-bottom: 32px;
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
   }
   
-  .header-row {
-    background: #f4f5f8;
-    font-weight: 600;
-    border-bottom: 2px solid #dcdcdc;
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-  
-  .data-row {
-    border-bottom: 1px solid #eee;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  .enhanced-stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
     align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    &.completed-card {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      
+      .stat-icon-wrapper {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+    }
+    
+    &.spending-card {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+      
+      .stat-icon-wrapper {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+    }
+    
+    &.favorite-card {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      
+      .stat-icon-wrapper {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+    }
+    
+    .stat-icon-wrapper {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      
+      ion-icon {
+        font-size: 28px;
+        color: #4f46e5;
+      }
+    }
+    
+    .stat-details {
+      flex: 1;
+      
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 4px;
+        
+        @media (max-width: 480px) {
+          font-size: 2rem;
+        }
+      }
+      
+      .stat-label {
+        font-size: 1.1rem;
+        font-weight: 600;
+        opacity: 0.95;
+        margin-bottom: 4px;
+      }
+      
+      .stat-sublabel {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+// Enhanced Loading State
+.enhanced-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  flex: 1;
+  
+  .loading-content {
+    text-align: center;
+    
+    .loading-animation {
+      margin-bottom: 24px;
+      
+      ion-spinner {
+        transform: scale(1.5);
+      }
+    }
+    
+    h3 {
+      color: #1f2937;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+    
+    p {
+      color: #6b7280;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+}
+
+// Appointments Sections
+.appointments-section {
+  margin-bottom: 40px;
+  flex: 1;
+  
+  &.history-section {
+    .section-title {
+      .title-icon {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      }
+      
+      .section-badge {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      }
+    }
+  }
+}
+
+// Section Titles
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+  
+  .title-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    
+    .title-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      ion-icon {
+        font-size: 24px;
+        color: white;
+      }
+    }
+    
+    .title-text {
+      h2 {
+        margin: 0 0 4px 0;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #111827;
+        letter-spacing: -0.025em;
+      }
+      
+      p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 1rem;
+      }
+    }
   }
   
+  .section-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Appointments Grid
+.appointments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+// Modern Appointment Cards
+.modern-appointment-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  }
+  
+  &.history-appointment {
+    .completed-bar {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+  }
+  
+  .card-priority-bar {
+    height: 5px;
+    width: 100%;
+  }
+  
+  .card-header {
+    padding: 20px 20px 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    
+    .service-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-radius: 12px;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.9rem;
+      flex: 1;
+      
+      &.completed-service {
+        background: #dcfce7;
+        color: #166534;
+      }
+      
+      ion-icon {
+        font-size: 16px;
+      }
+    }
+    
+    .date-time-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding: 8px 12px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      
+      .chip-date {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #374151;
+        line-height: 1;
+      }
+      
+      .chip-time {
+        font-size: 0.8rem;
+        color: #6b7280;
+        margin-top: 2px;
+      }
+    }
+  }
+  
+  .card-content {
+    padding: 20px;
+    
+    .service-details {
+      margin-bottom: 20px;
+      
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 6px 0;
+        line-height: 1.3;
+      }
+      
+      p {
+        color: #6b7280;
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.4;
+      }
+    }
+    
+    .appointment-info {
+      margin-bottom: 20px;
+      
+      .info-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 12px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        @media (max-width: 480px) {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        
+        .info-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          
+          &.status-full {
+            grid-column: span 2;
+            
+            @media (max-width: 480px) {
+              grid-column: span 1;
+            }
+          }
+          
+          ion-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+          }
+          
+          .info-content {
+            flex: 1;
+            
+            .info-label {
+              display: block;
+              font-size: 0.75rem;
+              color: #9ca3af;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              font-weight: 500;
+              margin-bottom: 2px;
+            }
+            
+            .info-value {
+              display: block;
+              font-size: 0.95rem;
+              color: #374151;
+              font-weight: 600;
+              
+              &.price-highlight {
+                color: #059669;
+                font-size: 1.1rem;
+                font-weight: 700;
+              }
+            }
+            
+            .modern-badge {
+              font-size: 0.75rem;
+              padding: 4px 10px;
+              font-weight: 600;
+              border-radius: 12px;
+            }
+          }
+        }
+      }
+    }
+    
+    .card-footer {
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+      
+      .completion-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #059669;
+        font-size: 0.9rem;
+        font-weight: 500;
+        
+        ion-icon {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+// Enhanced Empty State
+.enhanced-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 20px;
+  flex: 1;
+  justify-content: center;
+  
+  .empty-illustration {
+    margin-bottom: 32px;
+    
+    .empty-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      
+      ion-icon {
+        font-size: 48px;
+        color: #6366f1;
+      }
+    }
+  }
+  
+  .empty-content {
+    max-width: 400px;
+    
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 12px 0;
+    }
+    
+    > p {
+      font-size: 1.1rem;
+      color: #6b7280;
+      margin: 0 0 24px 0;
+      line-height: 1.5;
+    }
+    
+    .empty-suggestions {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      text-align: left;
+      
+      > p {
+        font-weight: 600;
+        color: #374151;
+        margin: 0 0 12px 0;
+      }
+      
+      ul {
+        margin: 0;
+        padding-left: 20px;
+        
+        li {
+          color: #6b7280;
+          margin-bottom: 8px;
+          line-height: 1.4;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    
+    .cta-button {
+      --border-radius: 16px;
+      --padding-start: 24px;
+      --padding-end: 24px;
+      height: 48px;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Staggered animations
+.enhanced-stat-card {
+  animation: fadeInUp 0.6s ease-out;
+  
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.3s; }
+}
+
+.modern-appointment-card {
+  animation: slideInRight 0.6s ease-out;
+  
+  &:nth-child(1) { animation-delay: 0.2s; }
+  &:nth-child(2) { animation-delay: 0.3s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+  &:nth-child(4) { animation-delay: 0.5s; }
+}
+
+.section-title {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+// Responsive Design
+@media (max-width: 640px) {
+  .enhanced-stats-section {
+    margin-bottom: 24px;
+    
+    .enhanced-stat-card {
+      padding: 20px;
+      
+      .stat-icon-wrapper {
+        width: 50px;
+        height: 50px;
+        
+        ion-icon {
+          font-size: 24px;
+        }
+      }
+      
+      .stat-details {
+        .stat-number {
+          font-size: 2rem;
+        }
+        
+        .stat-label {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  
+  .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    
+    .title-content {
+      .title-icon {
+        width: 40px;
+        height: 40px;
+        
+        ion-icon {
+          font-size: 20px;
+        }
+      }
+      
+      .title-text {
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+  
+  .modern-appointment-card {
+    .card-header {
+      padding: 16px 16px 0 16px;
+      flex-direction: column;
+      gap: 12px;
+      
+      .service-badge {
+        align-self: flex-start;
+      }
+      
+      .date-time-chip {
+        align-self: flex-end;
+      }
+    }
+    
+    .card-content {
+      padding: 16px;
+    }
+  }
+}

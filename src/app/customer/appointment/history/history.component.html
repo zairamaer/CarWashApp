@@ -1,25 +1,177 @@
-<ion-text color="primary">
-  <h2 class="ion-text-center ion-padding-vertical">Booking History</h2>
-</ion-text>
+<!-- Remove ion-content wrapper and use just a div -->
+<div class="history-container">
+  <!-- Pull to Refresh - Note: This might not work without ion-content, consider removing -->
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="enhanced-loading">
+    <div class="loading-content">
+      <div class="loading-animation">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+      </div>
+      <h3>Loading Your History</h3>
+      <p>Please wait while we fetch your completed appointments...</p>
+    </div>
+  </div>
 
-<ion-grid class="history-table">
-  <ion-row class="header-row">
-    <ion-col size="12" sizeMd="2"><strong>Service</strong></ion-col>
-    <ion-col size="12" sizeMd="2"><strong>Date</strong></ion-col>
-    <ion-col size="12" sizeMd="2"><strong>Time</strong></ion-col>
-    <ion-col size="12" sizeMd="3"><strong>Vehicle</strong></ion-col>
-    <ion-col size="12" sizeMd="3"><strong>Status</strong></ion-col>
-  </ion-row>
+  <!-- Enhanced Stats Section (Remove customer info since it's now in parent) -->
+  <div *ngIf="!isLoading && isLoggedIn() && completedAppointments.length > 0" class="enhanced-stats-section">
+    <div class="stats-grid">
+      <div class="enhanced-stat-card completed-card">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="checkmark-circle"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <div class="stat-number">{{ completedAppointments.length }}</div>
+          <div class="stat-label">Services Completed</div>
+          <div class="stat-sublabel">Total appointments</div>
+        </div>
+      </div>
+      
+      <div class="enhanced-stat-card spending-card">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="card"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <div class="stat-number">{{ formatPrice(getTotalSpent().toString()) }}</div>
+          <div class="stat-label">Total Investment</div>
+          <div class="stat-sublabel">Amount spent on care</div>
+        </div>
+      </div>
+      
+      <div class="enhanced-stat-card favorite-card">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="star"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <div class="stat-number">{{ getMostFrequentService() }}</div>
+          <div class="stat-label">Favorite Service</div>
+          <div class="stat-sublabel">Most booked</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <ion-row *ngFor="let appointment of appointments" class="data-row">
-    <ion-col size="12" sizeMd="2">{{ appointment.service }}</ion-col>
-    <ion-col size="12" sizeMd="2">{{ appointment.date | date: 'shortDate' }}</ion-col>
-    <ion-col size="12" sizeMd="2">{{ appointment.time }}</ion-col>
-    <ion-col size="12" sizeMd="3">{{ appointment.vehicle }}</ion-col>
-    <ion-col size="12" sizeMd="3">
-      <ion-badge [color]="getStatusColor(appointment.status)">
-        {{ appointment.status }}
-      </ion-badge>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+  <!-- Login Required State -->
+  <div *ngIf="!isLoading && !isLoggedIn()" class="enhanced-empty-state">
+    <div class="empty-illustration">
+      <div class="empty-circle">
+        <ion-icon name="person-outline"></ion-icon>
+      </div>
+    </div>
+    <div class="empty-content">
+      <h2>Login Required</h2>
+      <p>Please log in to view your service history and track your car care journey.</p>
+      <ion-button fill="solid" color="primary" class="cta-button" routerLink="/login">
+        <ion-icon name="log-in-outline" slot="start"></ion-icon>
+        Login to Continue
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Empty History State -->
+  <div *ngIf="!isLoading && isLoggedIn() && completedAppointments.length === 0" class="enhanced-empty-state">
+    <div class="empty-illustration">
+      <div class="empty-circle">
+        <ion-icon name="calendar-clear-outline"></ion-icon>
+      </div>
+    </div>
+    <div class="empty-content">
+      <h2>No Service History Yet</h2>
+      <p>You haven't completed any car wash appointments yet. Start your car care journey today!</p>
+      <div class="empty-suggestions">
+        <p>Get started with:</p>
+        <ul>
+          <li>Book your first car wash service</li>
+          <li>Choose from our premium service options</li>
+          <li>Build your service history over time</li>
+        </ul>
+      </div>
+      <ion-button fill="solid" color="primary" class="cta-button" routerLink="/booking">
+        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+        Book Your First Service
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Service History Section -->
+  <div *ngIf="!isLoading && completedAppointments.length > 0" class="appointments-section history-section">
+    <div class="section-title">
+      <div class="title-content">
+        <div class="title-icon">
+          <ion-icon name="library-outline"></ion-icon>
+        </div>
+        <div class="title-text">
+          <h2>Service History</h2>
+          <p>Your completed appointments</p>
+        </div>
+      </div>
+      <div class="section-badge">
+        {{ completedAppointments.length }} completed
+      </div>
+    </div>
+    
+    <div class="appointments-grid">
+      <div *ngFor="let appointment of completedAppointments; trackBy: trackByAppointmentId" 
+           class="modern-appointment-card history-appointment">
+        <div class="card-priority-bar completed-bar"></div>
+        
+        <div class="card-header">
+          <div class="service-badge completed-service">
+            <ion-icon name="checkmark-circle"></ion-icon>
+            <span>{{ appointment.service_rate.service_type.serviceTypeName }}</span>
+          </div>
+          <div class="date-time-chip">
+            <div class="chip-date">{{ formatDate(appointment.datetime) }}</div>
+            <div class="chip-time">{{ formatTime(appointment.datetime) }}</div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="service-details">
+            <h3>{{ appointment.service_rate.service_type.serviceTypeName }}</h3>
+            <p>{{ appointment.service_rate.service_type.serviceTypeDescription }}</p>
+          </div>
+
+          <div class="appointment-info">
+            <div class="info-row">
+              <div class="info-item">
+                <ion-icon name="car-sport-outline" color="secondary"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Vehicle Size</span>
+                  <span class="info-value">{{ appointment.service_rate.vehicle_size.vehicleSizeDescription }}</span>
+                </div>
+              </div>
+              
+              <div class="info-item">
+                <ion-icon name="card-outline" color="success"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Price Paid</span>
+                  <span class="info-value price-highlight">{{ formatPrice(appointment.service_rate.price) }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="info-row">
+              <div class="info-item status-full">
+                <ion-icon [name]="getStatusIcon(appointment.status)" [color]="getStatusColor(appointment.status)"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Status</span>
+                  <ion-badge [color]="getStatusColor(appointment.status)" class="modern-badge">
+                    {{ appointment.status | titlecase }}
+                  </ion-badge>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            <div class="completion-info">
+              <ion-icon name="checkmark-done" color="success"></ion-icon>
+              <span>Service completed successfully</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
