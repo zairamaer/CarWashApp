@@ -14,7 +14,7 @@
       <ion-label position="floating">Vehicle Size</ion-label>
       <ion-select [(ngModel)]="service.vehicleSizeCode" name="vehicleSize" required>
         <ion-select-option *ngFor="let size of vehicleSizes" [value]="size.vehicleSizeCode">
-          {{ size.vehicleSizeCode }}
+          {{ size.vehicleSizeDescription }}
         </ion-select-option>
       </ion-select>
     </ion-item>
